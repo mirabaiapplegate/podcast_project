@@ -6,16 +6,16 @@
         <thead>
         <tr>
             <th>Podcast Name</th>
+            <th>Show</th>
         </tr>
         </thead>
         <tbody>
-        {#
         {% for podcast in podcasts %}
-        <tr>
-            <th>{{ podcasts[podcast][0] }}</th>
-        </tr>
+            <tr>
+                <th><a>{{ podcast.title }}</a></th>
+                <th>{{ podcast.show }}</th>
+            </tr>
         {% endfor %}
-        #}
         </tbody>
     </table>
 {% endblock %}
