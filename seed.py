@@ -1,10 +1,7 @@
 """Utility file to seed podcast database from data in seed_data/"""
 
 
-from model import Podcast
-from model import Event
-
-from model import connect_to_db, db
+from model import Podcast, Event, connect_to_db, db
 from server import app
 
 
@@ -19,9 +16,10 @@ def load_podcasts():
     # Read u.user file and insert data
     for row in open("seed_data/u.podcast"):
         row = row.rstrip()
-        title, episode_num, description = row.split("|")
+        title, episode_num, show, description = row.split("|")
 
-        podcast = Podcast(title=title, episode_num=episode_num, description=description)
+        podcast = Podcast(title=title, episode_num=episode_num, show=show,
+                          description=description)
 
         # We need to add to the session or it won't ever be stored
         db.session.add(podcast)
@@ -41,12 +39,14 @@ def load_events():
     # Read u.event file and insert data
     for row in open("seed_data/u.event"):
         row = row.rstrip()
-        start_at, end_at = row.split("|")
 
-        event = Event(start_at=start_at, end_at=end_at)
+        start_at, end_at, url, podcast_id = row.split("|")
 
-    # add event to session
-    db.session.add(event)
+        event = Event(start_at=start_at, end_at=end_at, url=url, 
+                      podcast_id=podcast_id)
+
+        # add event to session
+        db.session.add(event)
 
     # Commit the add of an event
     db.session.commit()

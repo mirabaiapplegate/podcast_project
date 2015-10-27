@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %} Podcast Storybook {% endblock %}</title>
+        <link rel="stylesheet"
+              href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.css"/>
+        <link rel="stylesheet" href="/static/css/site.css"/>
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-static-top">
+            <div class="container">
+
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">Podcast Project</a>
+                </div>
+
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="/index">
+                                Podcasts
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% block body %}
+           
+        {% endblock %}
+    </body>
+</html>

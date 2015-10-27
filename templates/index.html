@@ -1,0 +1,21 @@
+
+{% extends 'base.html' %}
+
+{% block body %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Podcast Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        {#
+        {% for podcast in podcasts %}
+        <tr>
+            <th>{{ podcasts[podcast][0] }}</th>
+        </tr>
+        {% endfor %}
+        #}
+        </tbody>
+    </table>
+{% endblock %}
