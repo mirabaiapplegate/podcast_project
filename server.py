@@ -12,8 +12,7 @@ app = Flask(__name__)
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
 
-# Normally, if you use an undefined variable in Jinja2, it fails silently.
-# This is horrible. Fix this so that, instead, it raises an error.
+# Prevent jinja from failing silently
 app.jinja_env.undefined = StrictUndefined
 
 
@@ -25,6 +24,13 @@ def index():
 
     return render_template("index.html", podcasts=podcasts)
 
+
+@app.route('/podcasts/<int:podcast_id>')
+def podcast(podcast_id):
+    """Show podcast user has selected"""
+
+    events = Event.query.filter(Event.podcast_id==podcast_id)
+    return render_template("podcast.html", events=events)
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
