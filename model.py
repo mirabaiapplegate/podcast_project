@@ -16,22 +16,22 @@ class Podcast(db.Model):
 
     podcast_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     title = db.Column(db.String(64), nullable=False)
-    episode_num = db.Column(db.Integer, nullable=True)
+    episode_num = db.Column(db.String(200), nullable=True)
     show = db.Column(db.String(64), nullable=True)
-    description = db.Column(db.Integer, nullable=True)
+    description = db.Column(db.String(200), nullable=True)
     
     #Define relationship to an event
     event = db.relationship("Event",
                             backref=db.backref("podcasts", order_by=podcast_id))
 
-    def __init__(self, id, title, episode_num, show, description):
-        """Construct Event objects"""
+    # def __init__(self, title, episode_num, show, description):
+    #     """Construct Event objects"""
 
-        self.id = id,
-        self.title = title,
-        self.episode_num = episode_num,
-        self.show = show,
-        self.description = description
+    #     # self.podcast_id = podcast_id,
+    #     self.title = title,
+    #     self.episode_num = episode_num,
+    #     self.show = show,
+    #     self.description = description
 
 
     def __repr__(self):
@@ -52,14 +52,14 @@ class Event(db.Model):
     podcast_id = db.Column(db.Integer, db.ForeignKey('podcasts.podcast_id'))
 
 
-    def __init__(self, event_id, start_at, end_at, url, podcast_id):
-        """Construct Event objects"""
+    # def __init__(self, event_id, start_at, end_at, url, podcast_id):
+    #     """Construct Event objects"""
         
-        self.event_id = event_id,
-        self.start_at = start_at,
-        self.end_at = end_at,
-        self.url = url,
-        self.podcast_id = podcast_id
+    #     self.event_id = event_id,
+    #     self.start_at = start_at,
+    #     self.end_at = end_at,
+    #     self.url = url,
+    #     self.podcast_id = podcast_id
 
     def __repr__(self):
         """Provide helpful representation when printed."""
