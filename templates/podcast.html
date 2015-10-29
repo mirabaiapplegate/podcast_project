@@ -15,21 +15,16 @@
       </ol>
 
       <!-- Wrapper for slides -->
-      <div class="carousel-inner" role="listbox">
-        <div class="item active">
-          <img src="{{ podcast.image }}" alt="...">
-          <div class="carousel-caption">
+      <div class="carousel-inner">
+          <div class="active item" data-interval="3000">
+              <img src="{{ podcast.image }}" />
           </div>
-        </div>
-
-        <div class="item">
-          {% for event in events %}
-          <img src="{{ event.url }}" alt="...">
-          <div class="carousel-caption">
-            ...
+          <div class="item" data-interval="6000">
+              <img src="https://s3-us-west-2.amazonaws.com/hbpodcastproject/planet_money_659/MessyAdvancedHoneybadger.gif" />
           </div>
-          {% endfor %}
-        </div>
+          <div class="item" data-interval="9000">
+              <img src="https://s3-us-west-2.amazonaws.com/hbpodcastproject/planet_money_659/money-printing-press.jpg" />
+          </div>
       </div>
 
       <!-- Controls -->
