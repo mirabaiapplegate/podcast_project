@@ -30,7 +30,8 @@ def podcast(podcast_id):
     """Show podcast user has selected"""
 
     events = Event.query.filter(Event.podcast_id==podcast_id)
-    return render_template("podcast.html", events=events)
+    podcast = Podcast.query.get(podcast_id)
+    return render_template("podcast.html", events=events, podcast=podcast)
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point

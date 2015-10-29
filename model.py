@@ -19,6 +19,7 @@ class Podcast(db.Model):
     episode_num = db.Column(db.String(200), nullable=True)
     show = db.Column(db.String(64), nullable=True)
     description = db.Column(db.String(200), nullable=True)
+    audio = db.Column(db.String(200), nullable=True)
     
     #Define relationship to an event
     event = db.relationship("Event",

@@ -16,10 +16,10 @@ def load_podcasts():
     # Read u.user file and insert data
     for row in open("seed_data/u.podcast"):
         row = row.strip()
-        title, episode_num, show, description = row.split("|")
+        title, episode_num, show, description, audio = row.split("|")
 
-        print type(title), type(episode_num), type(show), type(description)
-        podcast = Podcast(title=title, episode_num=episode_num, show=show, description=description)
+        podcast = Podcast(title=title, episode_num=episode_num, show=show, 
+                            description=description, audio=audio)
 
         # We need to add to the session or it won't ever be stored
         db.session.add(podcast)
