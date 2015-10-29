@@ -19,12 +19,11 @@
           <div class="active item" data-interval="3000">
               <img src="{{ podcast.image }}" />
           </div>
-          <div class="item" data-interval="6000">
-              <img src="https://s3-us-west-2.amazonaws.com/hbpodcastproject/planet_money_659/MessyAdvancedHoneybadger.gif" />
+          {% for event in events %}
+          <div class="item" data-interval="{{ event.start_at }}">
+              <img src="{{ event.url }}" />
           </div>
-          <div class="item" data-interval="9000">
-              <img src="https://s3-us-west-2.amazonaws.com/hbpodcastproject/planet_money_659/money-printing-press.jpg" />
-          </div>
+          {% endfor %}
       </div>
 
       <!-- Controls -->
