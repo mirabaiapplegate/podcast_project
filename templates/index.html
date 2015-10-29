@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 
 {% block body %}
@@ -12,7 +11,7 @@
         <tbody>
         {% for podcast in podcasts %}
             <tr>
-                <th><a href="/podcasts/{{ podcast.podcast_id }}">{{ podcast.title }}</a></th>
+                <th><a href="/{{ podcast.podcast_id }}">{{ podcast.title }}</a></th>
                 <th>{{ podcast.show }}</th>
             </tr>
         {% endfor %}

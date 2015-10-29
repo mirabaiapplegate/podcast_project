@@ -25,12 +25,13 @@ def index():
     return render_template("index.html", podcasts=podcasts)
 
 
-@app.route('/podcasts/<int:podcast_id>')
+@app.route('/<int:podcast_id>')
 def podcast(podcast_id):
     """Show podcast user has selected"""
 
     events = Event.query.filter(Event.podcast_id==podcast_id)
     podcast = Podcast.query.get(podcast_id)
+
     return render_template("podcast.html", events=events, podcast=podcast)
 
 if __name__ == "__main__":
