@@ -7,13 +7,12 @@
 
     </head>
     <body>
+        <!-- Navbar -->
         <div class="navbar navbar-inverse navbar-static-top">
             <div class="container">
-
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/">Podcast Project</a>
                 </div>
-
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
@@ -26,8 +25,14 @@
             </div>
         </div>
 
-        {% block body %}
-           
-        {% endblock %}
+        <!-- Container for body of page -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-2">
+                    {% block body %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
     </body>
 </html>
