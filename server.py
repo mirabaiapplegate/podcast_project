@@ -33,7 +33,10 @@ def podcast(podcast_id):
     events = Event.query.filter(Event.podcast_id==podcast_id)
     podcast = Podcast.query.get(podcast_id)
 
-    return render_template("podcast.html", events=events, podcast=podcast)
+    carousel_images = db.session.query(Event.url).filter(Event.podcast_id==podcast_id).all()
+    
+    return render_template("podcast.html", events=events, podcast=podcast,
+                            carousel_images=carousel_images)
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
