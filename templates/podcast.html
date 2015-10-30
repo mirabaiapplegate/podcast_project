@@ -3,7 +3,7 @@
 {% block body %}
     <h4>{{ podcast.title }}</h4>
     <audio controls>
-        <source src="{{ podcast.audio }}" type="audio/mpeg">
+        <source src="{{ podcast.audio }}" class="player_audio" type="audio/mpeg">
     </audio>
 
     <div id="podcast-carousel" class="carousel slide" data-ride="carousel">
@@ -20,7 +20,7 @@
               <img src="{{ podcast.image }}" />
           </div>
           {% for event in events %}
-          <div class="item" data-interval="{{ event.start_at }}">
+          <div class="item" data-interval="{{ event.start_at * 1000 }}">
               <img src="{{ event.url }}" />
           </div>
           {% endfor %}
