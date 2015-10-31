@@ -7,6 +7,7 @@ from flask_bootstrap import Bootstrap
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import Podcast, Event, connect_to_db, db
+import json
 
 app = Flask(__name__)
 
@@ -34,9 +35,9 @@ def podcast(podcast_id):
     podcast = Podcast.query.get(podcast_id)
 
     carousel_images = db.session.query(Event.url).filter(Event.podcast_id==podcast_id).all()
-    
+    print carousel_images
     return render_template("podcast.html", events=events, podcast=podcast,
-                            carousel_images=carousel_images)
+                            carousel_images=map(json.dumps, carousel_images))
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point

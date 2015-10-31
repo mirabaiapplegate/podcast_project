@@ -2,32 +2,17 @@
 
 // Wait until page has loaded
 $(document).ready(function() {
+    var carousel_images = ['https://s3-us-west-2.amazonaws.com/hbpodcastproject/planet_money_659/planet_money_659.jpg', 'https://s3-us-west-2.amazonaws.com/hbpodcastproject/planet_money_659/MessyAdvancedHoneybadger.gif', 'https://s3-us-west-2.amazonaws.com/hbpodcastproject/planet_money_659/money-printing-press.jpg', 'https://s3-us-west-2.amazonaws.com/hbpodcastproject/planet_money_659/money_shredder.jpg'];
+ 
+      for(var i=0 ; i< carousel_images.length ; i++) {
+        $('<div class="item"><img src="'+carousel_images[i]+'"><div class="carousel-caption"></div></div>').appendTo('.carousel-inner');
+        
+        $('<li data-target="#carousel-example-generic" data-slide-to="'+i+'"></li>').appendTo('.carousel-indicators')
 
-    // Initialize a variable for time
-    var t;
+      }
+      $('.item').first().addClass('active');
+      $('.carousel-indicators > li').first().addClass('active');
+      $('#carousel-example-generic').carousel();
 
-    // Initialize a variable for the start of the carousel
-    var start = $('#podcast-carousel').find('.active').attr('data-interval');
-
-    // Settimeout on carousel
-    t = setTimeout("$('#podcast-carousel').carousel({interval:1000});", start-1000);
-
-    $('#podcast-carousel').on('slid.bs.carousel', function () {   
-         clearTimeout(t);  
-
-         var duration = $(this).find('.active').attr('data-interval');
-
-         $('#podcast-carousel').carousel('pause');
-
-         t = setTimeout("$('#podcast-carousel').carousel();", duration-1000);
-    })
-
-    $('.carousel-control.right').on('click', function(){
-        clearTimeout(t);   
-    });
-
-    $('.carousel-control.left').on('click', function(){
-        clearTimeout(t);   
-    });
 
 });
