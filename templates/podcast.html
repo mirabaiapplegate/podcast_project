@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
 
+{% block head %}
+
+    <link rel="stylesheet" type="text/css" href="/static/css/podcast.css">
+
+{% endblock%}
+
 {% block body %}
     <h4>{{ podcast.title }}</h4>
-    <audio controls>
-        <source src="{{ podcast.audio }}" class="player_audio" type="audio/mpeg">
-    </audio>
+
 
     <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
       <!-- Indicators -->
@@ -19,6 +23,17 @@
         <span class="glyphicon glyphicon-chevron-right"></span>
       </a>
     </div>
+    <div class="wrapper">
+      <audio id="song" width="300" height="32" ontimeupdate="updateTime()" controls="controls"><source src="{{ podcast.audio }}" type="audio/mp3" />
+        <div class="amplitude-song-time-visualization" amplitude-single-song-time-visualization="true" id="song-time-visualization">
+          
+        </div>
+
+        <div class="amplitude-play-pause amplitude-paused" amplitude-main-play-pause="true"></div>
+        <div class="push"></div>
+      </audio>
+    </div>
+    <div class="footer"></div>
     {% endblock %}   
 
     <!-- Javascript -->
