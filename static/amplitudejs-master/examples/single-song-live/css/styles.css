@@ -47,29 +47,7 @@ table {
     border-spacing: 0;
 }
 
-* {
-    margin: 0;
-}
-html, body {
-    height: 100%;
-}
-.wrapper {
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto -142px; /* the bottom margin is the negative value of the footer's height */
-}
-.footer, .push {
-    height: 142px; /* .push must be the same height as .footer */
-}
 
-/*
-	Body
-*/
-body{
-	background-color: #0B4C63;
-    padding-top: 100px;
-}
 /*
     State hidden
 */
@@ -78,48 +56,11 @@ div.hidden-on-collapse{
 }
 
 /*
-    Top Header
-*/
-div#top-header{
-    background-color: #f2f2f2;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    width: 370px;
-    height: 40px;
-    margin: auto;
-    text-align: center;
-    line-height: 20px;
-    padding-top: 10px;
-    position: relative;
-    margin-bottom: -50px;
-}
-
-/*
-    Large album container
-*/
-div#top-large-album{
-    width: 370px;
-    height: 370px;
-    margin: auto;
-    margin-bottom: -45px;
-    z-index: 0;
-}
-
-/*
-    Large Album Art
-*/
-img#large-album-art{
-    width: 370px;
-    height: 370px;
-    border-radius: 5px;
-}
-
-/*
 	Small Player
 */
 div#small-player{
 	width: 100%;
-	height: 45px;
+	height: 75px;
 	background-color: #f2f2f2;
 	border-radius: 5px;
     margin: auto;
