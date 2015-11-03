@@ -3,6 +3,7 @@
     <head>
         <title>{% block title %} Podcast Project {% endblock %}</title>
         
+        <link rel="stylesheet" type="text/css" href="/static/css/base.css">
         <!-- Bootstrap -->
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
@@ -33,6 +34,8 @@
             </div>
         </div>
 
+        <div class='wrapper'>
+            
         <!-- Container for body of page -->
         <div class="container">
             <div class="row">
@@ -41,6 +44,14 @@
                     {% endblock %}
                 </div>
             </div>
+        </div>
+
+            <div class='push'></div>
+        </div>
+        <!-- Container for footer of page -->
+        <div id="footer" class="footer">
+            {% block footer %}
+            {% endblock %}
         </div>
         <!-- Jquery -->
         <script src="https://code.jquery.com/jquery.js"></script>

@@ -3,13 +3,14 @@
 {% block head %}
 
     <link rel="stylesheet" type="text/css" href="/static/css/podcast.css">
-
+    <link rel="stylesheet" type="text/css" href="/static/amplitudejs-master/examples/single-song-live/css/styles.css">
 {% endblock%}
 
 {% block body %}
+    <!-- Podcast Title and Episode -->
     <h4>{{ podcast.title }}</h4>
 
-
+    <!-- Start Carousel -->
     <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
       <!-- Indicators -->
       <ol class="carousel-indicators"></ol>
@@ -23,22 +24,57 @@
         <span class="glyphicon glyphicon-chevron-right"></span>
       </a>
     </div>
-    <div class="wrapper">
-      <audio id="song" width="300" height="32" ontimeupdate="updateTime()" controls="controls"><source src="{{ podcast.audio }}" type="audio/mp3" />
-        <div class="amplitude-song-time-visualization" amplitude-single-song-time-visualization="true" id="song-time-visualization">
-          
-        </div>
+    <!-- End Carousel -->
+    {% endblock %}
+    {% block footer %}
+    <!-- Begin Small Player -->
+    <div id="small-player">
+      <!-- Begin Small Player Left -->
+      <div id="small-player-left">
+      </div>
+      <!-- End Small Player Left -->
 
-        <div class="amplitude-play-pause amplitude-paused" amplitude-main-play-pause="true"></div>
-        <div class="push"></div>
-      </audio>
+      <!-- Begin Small Player Album Art -->
+      <img id="small-player-album-art" amplitude-song-info="cover"/>
+      <!-- End Small Player Album Art -->
+
+      <!-- Begin Small Player Middle -->
+      <div id="small-player-middle">  
+        <div id="small-player-middle-top">
+          <!-- Begin Controls Container -->
+          <div id="small-player-middle-controls">
+            <div class="amplitude-play-pause amplitude-paused" amplitude-main-play-pause="true"></div>
+          </div>
+          <!-- End Controls Container -->
+
+          <!-- Begin Meta Container -->
+          <div id="small-player-middle-meta">
+            <div id="now-playing-title" amplitude-song-info="name"></div>
+            <div class="album-information"><span amplitude-song-info="artist"></span> - <span amplitude-song-info="album"></span></div>
+          </div>
+          <!-- End Meta Container -->
+        </div>
+        
+        <div id="small-player-middle-bottom">
+          <div class="amplitude-song-time-visualization" amplitude-single-song-time-visualization="true" id="song-time-visualization"></div>
+        </div>
+      </div>
+      <!-- End Small Player Middle -->
+
+      <!-- Begin Small Player Right -->
+      <div id="small-player-right">
+        <span id="current-time">
+          <span class="amplitude-current-minutes" amplitude-single-current-minutes="true">0</span>:<span class="amplitude-current-seconds" amplitude-single-current-seconds="true">00</span>
+        </span>
+      </div>
+      <!-- End Small Player Right -->
     </div>
-    <div class="footer"></div>
+    <!-- End Small Player -->
+
+
     {% endblock %}   
 
     <!-- Javascript -->
     {% block js %}
-      <script src="/static/js/podcast.js">
-
-      </script>
+      <script src="/static/js/podcast.js"></script>
     {% endblock %}

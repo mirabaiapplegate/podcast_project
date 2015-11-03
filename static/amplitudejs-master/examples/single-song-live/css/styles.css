@@ -47,6 +47,22 @@ table {
     border-spacing: 0;
 }
 
+* {
+    margin: 0;
+}
+html, body {
+    height: 100%;
+}
+.wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -142px; /* the bottom margin is the negative value of the footer's height */
+}
+.footer, .push {
+    height: 142px; /* .push must be the same height as .footer */
+}
+
 /*
 	Body
 */
@@ -102,7 +118,7 @@ img#large-album-art{
 	Small Player
 */
 div#small-player{
-	width: 370px;
+	width: 100%;
 	height: 45px;
 	background-color: #f2f2f2;
 	border-radius: 5px;
