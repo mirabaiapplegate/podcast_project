@@ -27,7 +27,7 @@
     <!-- End Carousel -->
     {% endblock %}
     {% block footer %}
-    
+
     <!-- Begin Small Player -->
     <div id="small-player">
       <!-- Begin Small Player Left -->
@@ -37,6 +37,7 @@
 
       <!-- Begin Small Player Album Art -->
       <img id="small-player-album-art" amplitude-song-info="cover"/>
+
       <!-- End Small Player Album Art -->
 
       <!-- Begin Small Player Middle -->
@@ -45,19 +46,21 @@
           <!-- Begin Controls Container -->
           <div id="small-player-middle-controls">
             <div class="amplitude-play-pause amplitude-paused" amplitude-main-play-pause="true"></div>
+
           </div>
           <!-- End Controls Container -->
 
           <!-- Begin Meta Container -->
           <div id="small-player-middle-meta">
             <div id="now-playing-title" amplitude-song-info="name"></div>
-            <div class="album-information"><span amplitude-song-info="artist"></span> - <span amplitude-song-info="album"></span></div>
+            <div class="album-information"><span amplitude-song-info="artist"></span> - <span amplitude-song-info="album"></span>
+                          <div class="amplitude-song-time-visualization" amplitude-single-song-time-visualization="true" id="song-time-visualization"></div>
+
+            </div>
+
           </div>
           <!-- End Meta Container -->
         </div>
-        
-        <div class="amplitude-song-time-visualization" amplitude-single-song-time-visualization="true" id="song-time-visualization"></div>
-
       </div>
       <!-- End Small Player Middle -->
 
