@@ -55,8 +55,6 @@
           <div id="small-player-middle-meta">
             <div id="now-playing-title" amplitude-song-info="name"></div>
             <div class="album-information"><span amplitude-song-info="artist">
-              
-            </span> - <span amplitude-song-info="album"></span>
             <div class="amplitude-song-time-visualization" amplitude-single-song-time-visualization="true" id="song-time-visualization"></div>
 
             </div>
@@ -103,6 +101,20 @@
             $('.item').first().addClass('active');
             $('.carousel-indicators > li').first().addClass('active');
             $('#carousel-image').carousel();
+          });
+
+            // Initialize Amplitude Audio Player
+            Amplitude.init({
+              "songs": [
+                  {
+                      "name": "{{ podcast.show }}",
+                      "artist": "{{ podcast.title }}",
+                      "url": "{{ podcast.audio }}",
+                      "live": false,
+                      "cover_art_url": "{{ podcast.image }}"
+                  }
+              ],
+              "default_album_art": "images/no-cover.png"
           });
 
         });
