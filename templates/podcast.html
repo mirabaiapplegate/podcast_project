@@ -1,35 +1,37 @@
 {% extends 'base.html' %}
 
 {% block head %}
-
     <link rel="stylesheet" type="text/css" href="/static/css/podcast.css">
     <link rel="stylesheet" type="text/css" href="/static/amplitudejs-master/examples/single-song-live/css/styles.css">
 {% endblock%}
 
 {% block body %}
+  {{ podcast.podcast_id }}
     <!-- Podcast Title and Episode -->
-    <h4>{{ podcast.show }}: {{ podcast.title }}</h4>
-    <div class="col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3 col-xs-12"
-    <!-- Start Carousel -->
-    <div id="carousel-image" class="carousel slide" data-ride="carousel">
-      <!-- Indicators -->
-      <ol class="carousel-indicators"></ol>
-      <!-- Wrapper for slides -->
-      <div class="carousel-inner"></div>
-      <!-- Controls -->
-      <a class="left carousel-control" href="#carousel-image" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left"></span>
-      </a>
-      <a class="right carousel-control" href="#carousel-image" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right"></span>
-      </a>
+    <div class="col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3 col-xs-12">
+      <h4>{{ podcast.show }}: {{ podcast.title }}</h4>
+      <!-- Start Carousel -->
+      <div id="carousel-image" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators"></ol>
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner"></div>
+        <!-- Controls -->
+        <a class="left carousel-control" href="#carousel-image" data-slide="prev">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="right carousel-control" href="#carousel-image" data-slide="next">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+      </div>
     </div>
     <!-- End Carousel -->
     {% endblock %}
-    {% block footer %}
 
-    <!-- Begin Small Player -->
+    {% block footer %}
+    <!-- Begin Small Audio Player -->
     <div id="small-player">
+
       <!-- Begin Small Player Left -->
       <div id="small-player-left">
       </div>
@@ -37,24 +39,25 @@
 
       <!-- Begin Small Player Album Art -->
       <img id="small-player-album-art" amplitude-song-info="cover"/>
-
       <!-- End Small Player Album Art -->
 
       <!-- Begin Small Player Middle -->
       <div id="small-player-middle">  
         <div id="small-player-middle-top">
+
           <!-- Begin Controls Container -->
           <div id="small-player-middle-controls">
             <div class="amplitude-play-pause amplitude-paused" amplitude-main-play-pause="true"></div>
-
           </div>
           <!-- End Controls Container -->
 
           <!-- Begin Meta Container -->
           <div id="small-player-middle-meta">
             <div id="now-playing-title" amplitude-song-info="name"></div>
-            <div class="album-information"><span amplitude-song-info="artist"></span> - <span amplitude-song-info="album"></span>
-                          <div class="amplitude-song-time-visualization" amplitude-single-song-time-visualization="true" id="song-time-visualization"></div>
+            <div class="album-information"><span amplitude-song-info="artist">
+              
+            </span> - <span amplitude-song-info="album"></span>
+            <div class="amplitude-song-time-visualization" amplitude-single-song-time-visualization="true" id="song-time-visualization"></div>
 
             </div>
 
@@ -80,4 +83,28 @@
     <!-- Javascript -->
     {% block js %}
       <script src="/static/js/podcast.js"></script>
+      <script> 
+        "use strict";
+        // Wait until page has loaded
+        $(document).ready(function() {
+
+        // Get an object of arrays of urls
+          $.get('/images/{{ podcast.podcast_id }}.json', function(images) {
+            // loop over object to get individual urls
+             $.each(images, function(index, value) {
+                $.each(value, function(i, url) {
+                  $('<div class="item"><img src="'+url+'" class="img-responsive center-block"><div class="carousel-caption"></div></div>').appendTo('.carousel-inner');
+                  
+                  $('<li data-target="#carousel-image" data-slide-to="'+i+'"></li>').appendTo('.carousel-indicators');
+                });
+
+             });
+            
+            $('.item').first().addClass('active');
+            $('.carousel-indicators > li').first().addClass('active');
+            $('#carousel-image').carousel();
+          });
+
+        });
+      </script>
     {% endblock %}
