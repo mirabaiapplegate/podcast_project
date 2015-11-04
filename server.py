@@ -2,12 +2,12 @@
 
 from jinja2 import StrictUndefined
 
-from flask import Flask, render_template, redirect, request, flash, session, json, requests
+from flask import Flask, render_template, redirect, request, flash, session, json
 from flask_bootstrap import Bootstrap
 from flask_debugtoolbar import DebugToolbarExtension
 from json import dumps
 from model import Podcast, Event, connect_to_db, db
-
+import requests
 
 app = Flask(__name__)
 
@@ -60,22 +60,29 @@ def planet_money():
     r = requests.get(url)
     jdict = r.json()
 
+    # Parse a story
     for story in jdict['list']['story']:
-        title = story['title']['$text'] + "\n"
+        title = story['title']['$text']
 
-        description = story['teaser']['$text'] + "\n"
+        description = story['teaser']['$text']
+
 
         if 'show' in story:
-            program = story['show'][0]['program']['$text'] + "\n"
+            show = story['show'][0]['program']['$text']
         
-        image = story['image'][0]['src'] + "\n"
+        image = story['image'][0]['src']
         
+        image_caption = ''
         if 'caption' in story:
-            image_caption = story['image'][0]['caption']['$text'] + "\n"
+            image_caption = story['image'][0]['caption']['$text']
         
-        audio = story['audio'][0]['format']['mp3'][0]['$text'] + "\n" 
-        # TODO add to db...
-        new Podcast = sqlalchemy thing   
+        audio = story['audio'][0]['format']['mp3'][0]['$text']
+
+        # Add to db...
+        new_podcast = Podcast(title, show, description, audio, image, image_caption) 
+        
+        db.session.add(new_podcast)
+        db.session.commit()
 
 
 if __name__ == "__main__":

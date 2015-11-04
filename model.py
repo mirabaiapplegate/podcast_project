@@ -16,11 +16,11 @@ class Podcast(db.Model):
 
     podcast_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     title = db.Column(db.String(64), nullable=False)
-    episode_num = db.Column(db.String(200), nullable=True)
     show = db.Column(db.String(64), nullable=True)
     description = db.Column(db.String(200), nullable=True)
     audio = db.Column(db.String(200), nullable=True)
     image = db.Column(db.String(200), nullable=True)
+    image_caption = db.Column(db.String(2000), nullable=True)
     
     #Define relationship to an event
     event = db.relationship("Event",
@@ -31,7 +31,17 @@ class Podcast(db.Model):
 
         return "<Podcast podcast_id=%s title=%s>" % (self.podcast_id, self.title)
 
-
+    def __init__(self, title, episode_num, show, description):
+         """Construct Project objects"""
+     
+        self.podcast_id = podcast_id,
+        self.title = title,
+        self.show = show,
+        self.description = description,
+        self.audio = audio,
+        self.image = image,
+        self.image_caption = image_caption
+         
 class Event(db.Model):
     """Events of podcast website."""
 
@@ -49,6 +59,15 @@ class Event(db.Model):
 
         return "<Event event_id=%s start_at=%s" % (self.event_id, self.start_at)
 
+    def __init__(self, event_id, start_at, end_at, url, podcast_id):
+    """Construct Event objects"""
+             
+        self.event_id = event_id,
+        self.start_at = start_at,
+        self.end_at = end_at,
+        self.url = url,
+        self.podcast_id = podcast_id
+         
 
 ##############################################################################
 # Helper functions
