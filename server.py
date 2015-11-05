@@ -8,6 +8,10 @@ from flask_debugtoolbar import DebugToolbarExtension
 from json import dumps
 from model import Podcast, Event, connect_to_db, db
 import requests
+import os
+
+# Import NPR API KEY
+npr_auth_token = os.environ['NPR_AUTH_TOKEN']
 
 app = Flask(__name__)
 
@@ -20,7 +24,7 @@ app.jinja_env.undefined = StrictUndefined
 
 @app.route('/')
 def index():
-    """Homepage."""
+    """Homepage"""
 
     podcasts = Podcast.query.all()
 
@@ -29,11 +33,10 @@ def index():
 
 @app.route('/images/<int:podcast_id>.json')
 def work(podcast_id):
-
+    """Show carousel images"""
     carousel_images = db.session.query(Event.url).filter(Event.podcast_id==podcast_id).all()
    
     images = {"urls": carousel_images }
-    print images
 
     return jsonify(images)
 
@@ -52,15 +55,17 @@ def podcast(podcast_id):
 
     return render_template("podcast.html", events=events, podcast=podcast, images=images)
 
+
 @app.route('/planet_money')
 def planet_money():
     """ API call to NPR Planet Money to get 10 most recent episodes """
-    url = 'http://api.npr.org/query?apiKey=MDIwOTI5MjIyMDE0NDUzODQ0NzA3MTJmMw000&numResults=10&format=json&id=94427042&requiredAssets=audio&requiredAssets=text&requiredAssets=image' 
+    
+    url = 'http://api.npr.org/query?apiKey=' + npr_auth_token + '&numResults=10&format=json&id=94427042&requiredAssets=audio&requiredAssets=text&requiredAssets=image' 
 
     r = requests.get(url)
     jdict = r.json()
 
-    # Parse a story
+    # Parse a story returned from query
     for story in jdict['list']['story']:
         title = story['title']['$text']
 
@@ -77,12 +82,27 @@ def planet_money():
             image_caption = story['image'][0]['caption']['$text']
         
         audio = story['audio'][0]['format']['mp3'][0]['$text']
-        print "type of audio: ", type(audio)
-        # Add to db...
+
+        # Add to podcast to db...
         new_podcast = Podcast(title, show, description, audio, image, image_caption) 
-        
+
         db.session.add(new_podcast)
         db.session.commit()
+
+        # Because "view did not respond" is scary
+        print "Success!"
+
+# @app.route('/planet_money_event')
+# def planet_money_event():
+#     """Create an event for each planet money episode added to the database"""
+        # start_at = 0
+        # end_at = None
+
+        # # Add an podcast image as first event to db. 
+        # new_event = Event(start_at, end_at, image, new_podcast.podcast_id)
+        # print event_id, new_podcast.podcast_id
+        # db.session.add(new_event)
+        # db.session.commit()
 
 
 if __name__ == "__main__":
