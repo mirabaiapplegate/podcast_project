@@ -31,15 +31,14 @@ class Podcast(db.Model):
 
         return "<Podcast podcast_id=%s title=%s>" % (self.podcast_id, self.title)
 
-    def __init__(self, title, episode_num, show, description):
-         """Construct Project objects"""
-     
-        self.podcast_id = podcast_id,
-        self.title = title,
-        self.show = show,
-        self.description = description,
-        self.audio = audio,
-        self.image = image,
+    def __init__(self, title, show, description, audio, image, image_caption):
+        """Construct Project objects"""
+
+        self.title = title
+        self.show = show
+        self.description = description
+        self.audio = audio
+        self.image = image
         self.image_caption = image_caption
          
 class Event(db.Model):
@@ -60,12 +59,12 @@ class Event(db.Model):
         return "<Event event_id=%s start_at=%s" % (self.event_id, self.start_at)
 
     def __init__(self, event_id, start_at, end_at, url, podcast_id):
-    """Construct Event objects"""
+        """Construct Event objects"""
              
-        self.event_id = event_id,
-        self.start_at = start_at,
-        self.end_at = end_at,
-        self.url = url,
+        self.event_id = event_id
+        self.start_at = start_at
+        self.end_at = end_at
+        self.url = url
         self.podcast_id = podcast_id
          
 

@@ -2,7 +2,7 @@
 
 from jinja2 import StrictUndefined
 
-from flask import Flask, render_template, redirect, request, flash, session, json
+from flask import Flask, render_template, redirect, request, flash, session, json, jsonify
 from flask_bootstrap import Bootstrap
 from flask_debugtoolbar import DebugToolbarExtension
 from json import dumps
@@ -66,18 +66,18 @@ def planet_money():
 
         description = story['teaser']['$text']
 
-
+        show = None
         if 'show' in story:
             show = story['show'][0]['program']['$text']
         
         image = story['image'][0]['src']
         
-        image_caption = ''
+        image_caption = None
         if 'caption' in story:
             image_caption = story['image'][0]['caption']['$text']
         
         audio = story['audio'][0]['format']['mp3'][0]['$text']
-
+        print "type of audio: ", type(audio)
         # Add to db...
         new_podcast = Podcast(title, show, description, audio, image, image_caption) 
         
