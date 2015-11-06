@@ -1,7 +1,7 @@
 """Utility file to seed podcast database from data in seed_data/"""
 
 
-from model import Podcast, Event, connect_to_db, db
+from model import Podcast, Event, User, connect_to_db, db
 from server import app
 
 
@@ -16,10 +16,10 @@ def load_podcasts():
     # Read u.user file and insert data
     for row in open("seed_data/u.podcast"):
         row = row.strip()
-        title, show, description, audio, image = row.split("|")
+        title, show, description, audio, image, image_caption = row.split("|")
 
-        podcast = Podcast(title=title, show=show, 
-                            description=description, audio=audio, image=image)
+        podcast = Podcast(title=title, show=show, description=description, 
+                        audio=audio, image=image, image_caption=image_caption)
 
         # We need to add to the session or it won't ever be stored
         db.session.add(podcast)
@@ -40,16 +40,41 @@ def load_events():
     for row in open("seed_data/u.event"):
         row = row.rstrip()
 
-        start_at, end_at, url, podcast_id = row.split("|")
+        start_at, end_at, image_url, comment_link, comment, podcast_id, user_id = row.split("|")
 
-        event = Event(start_at=start_at, end_at=end_at, url=url, 
-                      podcast_id=podcast_id)
+        event = Event(start_at=start_at, end_at=end_at, image_url=image_url,
+                    comment_link=comment_link, comment=comment, podcast_id=podcast_id, 
+                    user_id=user_id)
 
         # add event to session
         db.session.add(event)
 
     # Commit the add of an event
     db.session.commit()
+
+def load_user():
+    """Load user from u.user into database."""
+
+    print "User"
+
+    # Delete db to avoid duplicates
+    User.query.delete()
+
+    # Read u.user file and insert data
+    for row in open("seed_data/u.user"):
+        row = row.rstrip()
+
+        profile_image, first_name, last_name, email, password = row.split("|")
+
+        user = User(profile_image=profile_image, first_name=first_name, last_name=last_name,
+                    email=email, password=password)
+
+        # add event to session
+        db.session.add(user)
+
+    # Commit the add of an event
+    db.session.commit()
+
 
 
 if __name__ == "__main__":
@@ -61,3 +86,4 @@ if __name__ == "__main__":
     # Import different types of data
     load_podcasts()
     load_events()
+    load_user()

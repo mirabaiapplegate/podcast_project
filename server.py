@@ -34,7 +34,7 @@ def index():
 @app.route('/images/<int:podcast_id>.json')
 def work(podcast_id):
     """Show carousel images"""
-    carousel_images = db.session.query(Event.url).filter(Event.podcast_id==podcast_id).all()
+    carousel_images = db.session.query(Event.image_url).filter(Event.podcast_id==podcast_id).all()
    
     images = {"urls": carousel_images }
 

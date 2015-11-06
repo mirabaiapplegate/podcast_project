@@ -49,25 +49,60 @@ class Event(db.Model):
     event_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     start_at = db.Column(db.Integer, nullable=False)
     end_at = db.Column(db.Integer, nullable=True)
-    url = db.Column(db.String(200), nullable=True)
+    image_url = db.Column(db.String(200), nullable=True)
+    comment_link = db.Column(db.String(200), nullable=True)
+    comment = db.Column(db.String(1000), nullable=True)
     podcast_id = db.Column(db.Integer, db.ForeignKey('podcasts.podcast_id'))
-
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
         return "<Event event_id=%s start_at=%s" % (self.event_id, self.start_at)
 
-    def __init__(self, event_id, start_at, end_at, url, podcast_id):
+    def __init__(self, start_at, end_at, image_url, comment_link, 
+                comment, podcast_id, user_id):
         """Construct Event objects"""
              
-        self.event_id = event_id
         self.start_at = start_at
         self.end_at = end_at
-        self.url = url
+        self.image_url = image_url
+        self.comment_link = comment_link
+        self.comment = comment
         self.podcast_id = podcast_id
-         
+        self.user_id = user_id
 
+
+class User(db.Model):
+    """Users of podcast website."""
+
+    __tablename__ = "users"
+
+    user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    profile_image = db.Column(db.String(200), nullable=True)
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=True)
+    email = db.Column(db.String(200), nullable=True)
+    password = db.Column(db.String(200), nullable=True)
+
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<User user_id=%s first_name=%s last_name=%s" % (self.user_id, 
+                self.first_name, self.last_name)
+
+    def __init__(self, profile_image, first_name, last_name, email, 
+                password):
+        """Construct User objects"""
+             
+        self.profile_image = profile_image
+        self.first_name = first_name
+        self.last_name = last_name
+        self.email = email
+        self.password = password
+
+     
 ##############################################################################
 # Helper functions
 
