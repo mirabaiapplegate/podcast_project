@@ -89,7 +89,7 @@
             // loop over object to get individual urls
              $.each(images, function(index, value) {
                 $.each(value, function(i, url) {
-                  $('<div class="item"><img src="'+image_url+'" class="img-responsive center-block"><div class="carousel-caption"></div></div>').appendTo('.carousel-inner');
+                  $('<div class="item"><img src="'+url+'" class="img-responsive center-block"><div class="carousel-caption"></div></div>').appendTo('.carousel-inner');
                   
                   $('<li data-target="#carousel-image" data-slide-to="'+i+'"></li>').appendTo('.carousel-indicators');
                 });
@@ -109,7 +109,7 @@
                       "artist": "{{ podcast.title }}",
                       "url": "{{ podcast.audio }}",
                       "live": false,
-                      "cover_art_url": "{{ podcast.image_url }}"
+                      "cover_art_url": "{{ podcast.image }}"
                   }
               ],
               "default_album_art": "images/no-cover.png"

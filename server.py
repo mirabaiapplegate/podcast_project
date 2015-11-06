@@ -6,7 +6,7 @@ from flask import Flask, render_template, redirect, request, flash, session, jso
 from flask_bootstrap import Bootstrap
 from flask_debugtoolbar import DebugToolbarExtension
 from json import dumps
-from model import Podcast, Event, connect_to_db, db
+from model import Podcast, Event, User, connect_to_db, db
 import requests
 import os
 
@@ -47,7 +47,7 @@ def podcast(podcast_id):
 
     events = Event.query.filter(Event.podcast_id==podcast_id)
     podcast = Podcast.query.get(podcast_id)
-    carousel_images = db.session.query(Event.url).filter(Event.podcast_id==podcast_id).all()
+    carousel_images = db.session.query(Event.image_url).filter(Event.podcast_id==podcast_id).all()
     
     images = {podcast_id: carousel_images }
 
