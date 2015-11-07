@@ -31,10 +31,16 @@
           <span class="glyphicon glyphicon-chevron-right"></span>
         </a>
       </div>
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Write a comment...">
+      <div class="input-group input-group-lg">
         <span class="input-group-btn">
-          <button class="btn btn-primary" type="button">Submit</button>
+          <button class="btn glyphicon glyphicon-picture" type="button"></button>
+        </span>
+        <span class="input-group-btn">
+          <button class="btn glyphicon glyphicon-link" type="button"></button>
+        </span>
+        <input type="text" class="form-control" id="comment" placeholder="Write a comment...">
+        <span class="input-group-btn">
+          <button class="btn btn-primary" id="submit" type="button">Submit</button>
         </span>
       </div><!-- /input-group -->
     </div>
@@ -115,19 +121,28 @@
             $('#carousel-image').carousel();
           });
 
-            // Initialize Amplitude Audio Player
-            Amplitude.init({
-              "songs": [
-                  {
-                      "name": "{{ podcast.show }}",
-                      "artist": "{{ podcast.title }}",
-                      "url": "{{ podcast.audio }}",
-                      "live": false,
-                      "cover_art_url": "{{ podcast.image }}"
-                  }
-              ],
-              "default_album_art": "images/no-cover.png"
-          });
+          // Initialize Amplitude Audio Player
+          Amplitude.init({
+            "songs": [
+                {
+                    "name": "{{ podcast.show }}",
+                    "artist": "{{ podcast.title }}",
+                    "url": "{{ podcast.audio }}",
+                    "live": false,
+                    "cover_art_url": "{{ podcast.image }}"
+                }
+            ],
+            "default_album_art": "images/no-cover.png"
+        });
+        
+        // Click event handler for comments
+        $( "#submit" ).on('click', function(podcast_id, user_id) {
+          var comment = $('#comment').val();
+          // TODO - this doesn't work because I haven't figured out how to get the user_id onto this page
+          // Event(0, None, None, None, comment, podcast_id, user_id)
+          // db.session.add(comment);
+          // db.session.commit();
+        });
 
         });
       </script>
