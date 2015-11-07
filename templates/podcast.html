@@ -6,15 +6,23 @@
 {% endblock%}
 
 {% block body %}
+
     <!-- Podcast Title and Episode -->
-    <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 col-xs-12">
+    <div class="col-md-12 col-lg-12 col-xs-12">
       <h4>{{ podcast.show }}: {{ podcast.title }}</h4>
+      <p>{{ podcast.description }}</p>
       <!-- Start Carousel -->
       <div id="carousel-image" class="carousel slide" data-ride="carousel">
         <!-- Indicators -->
         <ol class="carousel-indicators"></ol>
         <!-- Wrapper for slides -->
-        <div class="carousel-inner"></div>
+        <div class="carousel-inner">
+          <div class="carousel-caption">
+            {% if podcast.image_caption %}
+              <h3>{{ podcast.image_caption }}</h3>
+            {% endif %}
+          </div>
+        </div>
         <!-- Controls -->
         <a class="left carousel-control" href="#carousel-image" data-slide="prev">
           <span class="glyphicon glyphicon-chevron-left"></span>
@@ -26,7 +34,7 @@
       <div class="input-group">
         <input type="text" class="form-control" placeholder="Write a comment...">
         <span class="input-group-btn">
-          <button class="btn btn-default" type="button">Submit</button>
+          <button class="btn btn-primary" type="button">Submit</button>
         </span>
       </div><!-- /input-group -->
     </div>
