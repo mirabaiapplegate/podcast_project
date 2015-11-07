@@ -14,3 +14,7 @@ html, body {
 .footer, .push {
     height: 142px; /* .push must be the same height as .footer */
 }
+#profile-image {
+    height: 50px;
+    width: 50px;
+}

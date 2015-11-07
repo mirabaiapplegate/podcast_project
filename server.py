@@ -27,8 +27,10 @@ def index():
     """Homepage"""
 
     podcasts = Podcast.query.all()
+    #Only selects first user. 
+    user = User.query.first()
 
-    return render_template("index.html", podcasts=podcasts)
+    return render_template("index.html", podcasts=podcasts, user=user)
 
 
 @app.route('/images/<int:podcast_id>.json')
@@ -39,6 +41,7 @@ def work(podcast_id):
     images = {"urls": carousel_images }
 
     return jsonify(images)
+
 
 
 @app.route('/<int:podcast_id>')
