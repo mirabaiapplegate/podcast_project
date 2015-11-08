@@ -30,6 +30,7 @@ def index():
     #Only selects first user. 
     user = User.query.first()
 
+
     return render_template("index.html", podcasts=podcasts, user=user)
 
 
@@ -52,11 +53,16 @@ def podcast(podcast_id):
     podcast = Podcast.query.get(podcast_id)
     carousel_images = db.session.query(Event.image_url).filter(Event.podcast_id==podcast_id).all()
     
+    #Only selects first user. 
+    user = User.query.first()
+
+
     images = {podcast_id: carousel_images }
 
     images = jsonify(images)
 
-    return render_template("podcast.html", events=events, podcast=podcast, images=images)
+    return render_template("podcast.html", events=events, podcast=podcast, 
+                            images=images, user=user)
 
 
 @app.route('/planet_money')
