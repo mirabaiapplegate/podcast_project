@@ -32,20 +32,22 @@
         </a>
       </div>
 
-      <div class="input-group input-group-lg">
-        
-        <img class="img-responsive img-rounded" src="{{ user.profile_image }}" id="comment-profile-image">
-        <span class="input-group-btn">
-          <button class="btn glyphicon glyphicon-picture" type="button"></button>
-        </span>
-        <span class="input-group-btn">
-          <button class="btn glyphicon glyphicon-link" type="button"></button>
-        </span>
-        <input type="text" class="form-control" id="comment" placeholder="Write a comment...">
-        <span class="input-group-btn">
-          <button class="btn btn-primary" id="submit" type="button">Submit</button>
-        </span>
-      </div><!-- /input-group -->
+      <form class="form-inline" action="/addComment" method="post" role="form">
+        <div class="form-group">
+          <img class="img-responsive img-rounded" src="{{ user.profile_image }}" id="comment-profile-image">
+          <span class="input-group-btn">
+            <button class="btn glyphicon glyphicon-picture" type="button"></button>
+          </span>
+          <span class="input-group-btn">
+            <button class="btn glyphicon glyphicon-link" type="button"></button>
+          </span>
+          <label class="sr-only" for="comment"></label>
+          <input type="comment" name="comment" class="form-control" id="comment" placeholder="Write a comment">
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+      </form>
+
     </div>
     <!-- End Carousel -->
     {% endblock %}
@@ -139,12 +141,23 @@
         });
         
         // Click event handler for comments
-        $( "#submit" ).on('click', function(podcast_id, user_id) {
+        $('#submit').click(function(event) {
+          event.preventDefault();
+
           var comment = $('#comment').val();
-          // TODO - this doesn't work because I haven't figured out how to get the user_id onto this page
-          // Event(0, None, None, None, comment, podcast_id, user_id)
-          // db.session.add(comment);
-          // db.session.commit();
+          
+          $.ajax({
+               url: '/addComment',
+               data: $('form').serialize(),
+               type: 'POST',
+               success: function(response) {
+                   console.log(response);
+               },
+               error: function(error) {
+                   console.log(error);
+               }
+           });
+
         });
 
         });

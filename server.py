@@ -55,15 +55,14 @@ def podcast(podcast_id):
     
     #Only selects first user. 
     user = User.query.first()
-
+    user_id = user.user_id
 
     images = {podcast_id: carousel_images }
 
     images = jsonify(images)
 
     return render_template("podcast.html", events=events, podcast=podcast, 
-                            images=images, user=user)
-
+                            images=images, user=user, user_id=user_id)
 
 @app.route('/planet_money')
 def planet_money():
@@ -92,7 +91,7 @@ def planet_money():
         
         audio = story['audio'][0]['format']['mp3'][0]['$text']
 
-        # Add to podcast to db...
+        # Add podcast to db...
         new_podcast = Podcast(title, show, description, audio, image, image_caption) 
 
         db.session.add(new_podcast)
@@ -101,23 +100,31 @@ def planet_money():
         # Because "view did not respond" is scary
         print "Success!"
 
-# @app.route('/planet_money_event')
-# def planet_money_event():
-#     """Create an event for each planet money episode added to the database"""
-        # start_at = 0
-        # end_at = None
+@app.route('/addComment', methods=['POST'])
+def add_comment():
+    """Add comment to db"""
 
-        # # Add an podcast image as first event to db. 
-        # new_event = Event(start_at, end_at, image, new_podcast.podcast_id)
-        # print event_id, new_podcast.podcast_id
-        # db.session.add(new_event)
-        # db.session.commit()
+    comment =  request.form['comment']
+    start_at = 0
+    end_at = None
+    image_url = None
+    comment_link = None
+    podcast_id = 1
+    user_id = 1
+
+    # Add comment to db
+    new_comment = Event(start_at, end_at, image_url, comment_link, comment, podcast_id, user_id)
+
+    
+    db.session.add(new_comment)
+    db.session.commit()
+
 
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
     # that we invoke the DebugToolbarExtension
-    app.debug = True
+    app.debug = False
 
     connect_to_db(app)
 

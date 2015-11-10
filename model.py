@@ -58,7 +58,7 @@ class Event(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Event event_id=%s start_at=%s" % (self.event_id, self.start_at)
+        return "<Event event_id=%s start_at=%s>" % (self.event_id, self.start_at)
 
     def __init__(self, start_at, end_at, image_url, comment_link, 
                 comment, podcast_id, user_id):
