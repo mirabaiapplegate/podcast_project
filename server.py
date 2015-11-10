@@ -48,11 +48,11 @@ def work(podcast_id):
 @app.route('/<int:podcast_id>')
 def podcast(podcast_id):
     """Show podcast user has selected"""
-
+    # TODO I don't think this events query is being used for anything...
     events = Event.query.filter(Event.podcast_id==podcast_id)
     podcast = Podcast.query.get(podcast_id)
     comments = Comment.query.filter(Comment.podcast_id==podcast_id)
-    print comments
+    
 
     #Only selects first user. 
     user = User.query.first()

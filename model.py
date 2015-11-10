@@ -67,6 +67,7 @@ class Event(db.Model):
         self.link = link
         self.podcast_id = podcast_id
 
+
 class Comment(db.Model):
     """Comments of podcast website."""
 
@@ -76,6 +77,15 @@ class Comment(db.Model):
     comment = db.Column(db.String(1000), nullable=True)
     podcast_id = db.Column(db.Integer, db.ForeignKey('podcasts.podcast_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+
+    #Define relationship to an user
+    user = db.relationship("User",
+                            backref=db.backref("comments", order_by=comment_id))
+
+    #Define relationship to a podcast
+    podcast = db.relationship("Podcast",
+                            backref=db.backref("comments", order_by=comment_id))
+
 
     def __repr__(self):
         """Provide helpful representation when printed."""
