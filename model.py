@@ -73,7 +73,6 @@ class Comment(db.Model):
     __tablename__ = "comments"
 
     comment_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    comment_link = db.Column(db.String(200), nullable=True)
     comment = db.Column(db.String(1000), nullable=True)
     podcast_id = db.Column(db.Integer, db.ForeignKey('podcasts.podcast_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
@@ -83,10 +82,9 @@ class Comment(db.Model):
 
         return "<Event comment_id=%s comment=%s>" % (self.comment_id, self.comment)
 
-    def __init__(self, comment_link, comment, podcast_id, user_id):
+    def __init__(self, comment, podcast_id, user_id):
         """Construct Comment objects"""
              
-        self.comment_link = comment_link
         self.comment = comment
         self.podcast_id = podcast_id
         self.user_id = user_id
