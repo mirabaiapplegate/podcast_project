@@ -50,22 +50,22 @@ class Event(db.Model):
     start_at = db.Column(db.Integer, nullable=False)
     end_at = db.Column(db.Integer, nullable=True)
     image_url = db.Column(db.String(200), nullable=True)
+    link = db.Column(db.String(200), nullable=True)
     podcast_id = db.Column(db.Integer, db.ForeignKey('podcasts.podcast_id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
         return "<Event event_id=%s start_at=%s>" % (self.event_id, self.start_at)
 
-    def __init__(self, start_at, end_at, image_url, podcast_id, user_id):
+    def __init__(self, start_at, end_at, image_url, link, podcast_id):
         """Construct Event objects"""
              
         self.start_at = start_at
         self.end_at = end_at
         self.image_url = image_url
+        self.link = link
         self.podcast_id = podcast_id
-        self.user_id = user_id
 
 class Comment(db.Model):
     """Comments of podcast website."""

@@ -105,15 +105,11 @@ def add_comment():
     """Add comment to db"""
 
     comment =  request.form['comment']
-    start_at = 0
-    end_at = None
-    image_url = None
-    comment_link = None
     podcast_id = 1
     user_id = 1
 
     # Add comment to db
-    new_comment = Event(start_at, end_at, image_url, comment_link, comment, podcast_id, user_id)
+    new_comment = Event(comment, podcast_id, user_id)
 
     
     db.session.add(new_comment)
