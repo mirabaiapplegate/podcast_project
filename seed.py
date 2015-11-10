@@ -40,11 +40,10 @@ def load_events():
     for row in open("seed_data/u.event"):
         row = row.rstrip()
 
-        start_at, end_at, image_url, comment_link, comment, podcast_id, user_id = row.split("|")
+        start_at, end_at, image_url, podcast_id, user_id = row.split("|")
 
         event = Event(start_at=start_at, end_at=end_at, image_url=image_url,
-                    comment_link=comment_link, comment=comment, podcast_id=podcast_id, 
-                    user_id=user_id)
+                     podcast_id=podcast_id, user_id=user_id)
 
         # add event to session
         db.session.add(event)
