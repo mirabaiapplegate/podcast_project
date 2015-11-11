@@ -12,7 +12,7 @@
       <h4>{{ podcast.show }}: {{ podcast.title }}</h4>
       <p>{{ podcast.description }}</p>
       <!-- Start Carousel -->
-      <div id="carousel-image" class="carousel slide" data-ride="carousel">
+      <div id="carousel-image" class="carousel slide" data-ride="carousel" data-interval="false">
         <!-- Indicators -->
         <ol class="carousel-indicators"></ol>
         <!-- Wrapper for slides -->
@@ -48,25 +48,46 @@
       <h3>Comments</h3>
       </div><!-- /col-sm-12 -->
       </div><!-- /row -->
-      {% for comment in comments %}
-      <div class="row">
-      <div class="col-sm-1">
-      <div class="thumbnail">
-      <img class="img-responsive user-photo" src="{{ comment.user.profile_image }}">
-      </div><!-- /thumbnail -->
-      </div><!-- /col-sm-1 -->
-      <div class="col-sm-5">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <strong>{{ comment.user.first_name }} {{ comment.user.last_name }}</strong> 
-          </div>
-        <div class="panel-body">
-        {{ comment.comment }}
-        </div><!-- /panel-body -->
-        </div><!-- /panel panel-default -->
-      </div><!-- /col-sm-5 -->
-      {% endfor %}
-      </div><!-- /row -->
+      <div id="comment-template">
+        <div class="row comment-box">
+        <div class="col-sm-1">
+        <div class="thumbnail">
+        <img class="img-responsive user-photo" src="">
+        </div><!-- /thumbnail -->
+        </div><!-- /col-sm-1 -->
+        <div class="col-sm-5">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <strong>TEST</strong> 
+            </div>
+          <div class="panel-body comment-body">
+            THIS IS A COMMENT
+          </div><!-- /panel-body -->
+          </div><!-- /panel panel-default -->
+        </div><!-- /col-sm-5 -->
+      </div>
+      <div class="comments">
+        {% for comment in comments %}
+        <div class="row comment-box">
+          <div class="col-sm-1">
+          <div class="thumbnail">
+          <img class="img-responsive user-photo" src="{{ comment.user.profile_image }}">
+          </div><!-- /thumbnail -->
+          </div><!-- /col-sm-1 -->
+          <div class="col-sm-5">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <strong>{{ comment.user.first_name }} {{ comment.user.last_name }}</strong> 
+              </div>
+            <div class="panel-body">
+            {{ comment.comment }}
+            </div><!-- /panel-body -->
+            </div><!-- /panel panel-default -->
+          </div><!-- /col-sm-5 -->
+        </div><!-- /row -->
+
+        {% endfor %}
+      </div>
 
       </div><!-- /container -->
 
@@ -132,35 +153,47 @@
         $(document).ready(function() {
 
         // Get an object of arrays of urls
-          $.get('/images/{{ podcast.podcast_id }}.json', function(images) {
-            // loop over object to get individual urls
-             $.each(images, function(index, value) {
-                $.each(value, function(i, url) {
-                  $('<div class="item"><img src="'+url+'" class="img-responsive center-block"><div class="carousel-caption"></div></div>').appendTo('.carousel-inner');
-                  
-                  $('<li data-target="#carousel-image" data-slide-to="'+i+'"></li>').appendTo('.carousel-indicators');
-                });
-
-             });
+        $.get('/images/{{ podcast.podcast_id }}.json', function(result) {
+          
+          $.each(result.data, function(i, image_attrs) {
+            $('<div class="item"><img src="'+image_attrs.image_url+'" class="img-responsive center-block"><div class="carousel-caption"></div></div>').appendTo('.carousel-inner');
             
-            $('.item').first().addClass('active');
-            $('.carousel-indicators > li').first().addClass('active');
-            $('#carousel-image').carousel();
+            $('<li data-target="#carousel-image" data-slide-to="'+i+'"></li>').appendTo('.carousel-indicators');
           });
 
-          // Initialize Amplitude Audio Player
-          Amplitude.init({
-            "songs": [
-                {
-                    "name": "{{ podcast.show }}",
-                    "artist": "{{ podcast.title }}",
-                    "url": "{{ podcast.audio }}",
-                    "live": false,
-                    "cover_art_url": "{{ podcast.image }}"
-                }
-            ],
-            "default_album_art": "images/no-cover.png"
+          $('.item').first().addClass('active');
+          $('.carousel-indicators > li').first().addClass('active');
+          $('#carousel-image').carousel();
+
+          Amplitude.active.addEventListener('timeupdate', function(event) { 
+            console.log(event.path[0].currentTime);
+            var currentPos = event.path[0].currentTime;
+            // if currentPos >= start_at && currentPos <= end_at
+            $.each(result.data, function (i, image_attrs) {
+              console.log((currentPos >= image_attrs.start_at), (currentPos <= image_attrs.end_at));
+              if(currentPos >= image_attrs.start_at && currentPos <= image_attrs.end_at) {
+                console.log("Yes!");
+                // $('#my-iframe').attr('href', image_attrs.image_url)
+                $('#carousel-image').carousel(i);
+              }
+            });
+          });
         });
+
+        // Initialize Amplitude Audio Player
+        Amplitude.init({
+          "songs": [
+              {
+                  "name": "{{ podcast.show }}",
+                  "artist": "{{ podcast.title }}",
+                  "url": "{{ podcast.audio }}",
+                  "live": false,
+                  "cover_art_url": "{{ podcast.image }}"
+              }
+          ],
+          "default_album_art": "images/no-cover.png"
+        });
+
         
         // Click event handler for comments
         $('#submit').click(function(event) {
@@ -173,7 +206,16 @@
                data: $('form').serialize(),
                type: 'POST',
                success: function(response) {
-                   console.log(response);
+                
+                console.log(response);
+                comment = response.comment;
+
+                var new_comment = $("#comment-template").clone();
+
+                new_comment.find(".comment-body").text(comment);
+
+                $('.comments').prepend(new_comment);
+
                },
                error: function(error) {
                    console.log(error);

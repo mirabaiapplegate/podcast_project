@@ -37,11 +37,16 @@ def index():
 @app.route('/images/<int:podcast_id>.json')
 def work(podcast_id):
     """Show carousel images"""
-    carousel_images = db.session.query(Event.image_url).filter(Event.podcast_id==podcast_id).all()
-   
-    images = {"urls": carousel_images }
+    image_data = db.session.query(Event.image_url, Event.start_at, Event.end_at).filter(Event.podcast_id==podcast_id).all()
+    images = []
 
-    return jsonify(images)
+    for data in image_data:
+        image_attrs = { "image_url": data[0], "start_at": data[1], "end_at": data[2] }
+        images.append(image_attrs)
+
+    result = { "data": images }
+
+    return jsonify(result)
 
 
 
@@ -92,7 +97,6 @@ def planet_money():
         db.session.add(new_podcast)
         db.session.commit()
 
-        # Because "view did not respond" is scary
         print "Success!"
 
 @app.route('/addComment', methods=['POST'])
@@ -100,7 +104,7 @@ def add_comment():
     """Add comment to db"""
 
     comment =  request.form['comment']
-    podcast_id = 1
+    podcast_id = 3
     user_id = 1
 
     # Add comment to db
@@ -110,7 +114,7 @@ def add_comment():
     db.session.add(new_comment)
     db.session.commit()
 
-    return "ok"
+    return jsonify(comment=comment)
 
 
 

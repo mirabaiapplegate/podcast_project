@@ -8,10 +8,10 @@ $(document).ready(function() {
     */
     $('#small-player').hover(function(){
       $('#small-player-middle-controls').show();
-      $('#small-player-middle-meta').hide();
+      // $('#small-player-middle-meta').hide();
     }, function(){
       $('#small-player-middle-controls').hide();
-      $('#small-player-middle-meta').show();
+      // $('#small-player-middle-meta').show();
 
     });
 
