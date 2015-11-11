@@ -52,13 +52,12 @@ def podcast(podcast_id):
     events = Event.query.filter(Event.podcast_id==podcast_id)
     podcast = Podcast.query.get(podcast_id)
     comments = Comment.query.filter(Comment.podcast_id==podcast_id)
-    
 
     #Only selects first user. 
     user = User.query.first()
     user_id = user.user_id
 
-    return render_template("podcast.html", events=events, podcast=podcast, user=user, user_id=user_id)
+    return render_template("podcast.html", events=events, comments=comments, podcast=podcast, user=user, user_id=user_id)
 
 @app.route('/planet_money')
 def planet_money():
@@ -105,11 +104,13 @@ def add_comment():
     user_id = 1
 
     # Add comment to db
-    new_comment = Event(comment, podcast_id, user_id)
+    new_comment = Comment(comment, podcast_id, user_id)
 
     
     db.session.add(new_comment)
     db.session.commit()
+
+    return "ok"
 
 
 
