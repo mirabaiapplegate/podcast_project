@@ -34,19 +34,15 @@
                 </div>
             </div>
         </div>
-        <!-- This wrapper necessary for sticky footer -->
-        <div class='wrapper'>
-            
-        <!-- Container for body of page -->
-        <div class="container">
-            <div class="row">
-                {% block body %}
-                {% endblock %}
-            </div>
-        </div>
 
-        <!-- This is my attempt to push stick the footer to the bottom of the page -->
-        <div class='push'></div>
+        <div class="page-wrap">
+            <!-- Container for body of page -->
+            <div class="container">
+                <div class="row">
+                    {% block body %}
+                    {% endblock %}
+                </div>
+            </div>
         </div>
 
         <!-- Container for footer of page -->

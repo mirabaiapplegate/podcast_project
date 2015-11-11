@@ -5,16 +5,12 @@ html, body {
     height: 100%;
     width: 100%;
 }
-.wrapper {
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto -142px !important;/* the bottom margin is the negative value of the footer's height */
-}
-.footer, .push {
-    height: 142px; /* .push must be the same height as .footer */
-}
+
 #profile-image {
     height: 50px;
     width: 50px;
+}
+#footer{
+    position:fixed; 
+    bottom:0;
 }

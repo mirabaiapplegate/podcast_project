@@ -106,7 +106,9 @@ def add_comment():
     comment =  request.form['comment']
     podcast_id = 3
     user_id = 1
-
+    user = User.query.get(user_id)
+    profile_image = user.profile_image
+    user_name = user.first_name + ' ' + user.last_name
     # Add comment to db
     new_comment = Comment(comment, podcast_id, user_id)
 
@@ -114,7 +116,7 @@ def add_comment():
     db.session.add(new_comment)
     db.session.commit()
 
-    return jsonify(comment=comment)
+    return jsonify(comment=comment, profile_image=profile_image, user_name=user_name)
 
 
 

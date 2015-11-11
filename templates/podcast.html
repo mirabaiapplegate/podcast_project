@@ -22,13 +22,7 @@
           </div>
         </div>
         <!-- Controls -->
-        <a class="left carousel-control" href="#carousel-image" data-slide="prev">
-          <span class="glyphicon glyphicon-chevron-left"></span>
-        </a>
-        <a class="right carousel-control" href="#carousel-image" data-slide="next">
-          <span class="glyphicon glyphicon-chevron-right"></span>
-        </a>
-      </div>
+    
 
       <form class="form-inline" action="/addComment" method="post" role="form">
         <div class="form-group">
@@ -43,36 +37,37 @@
       </form>
 
       <div class="container">
-      <div class="row">
-      <div class="col-sm-12">
-      <h3>Comments</h3>
-      </div><!-- /col-sm-12 -->
-      </div><!-- /row -->
-      <div id="comment-template">
-        <div class="row comment-box">
-        <div class="col-sm-1">
-        <div class="thumbnail">
-        <img class="img-responsive user-photo" src="">
-        </div><!-- /thumbnail -->
-        </div><!-- /col-sm-1 -->
-        <div class="col-sm-5">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <strong>TEST</strong> 
-            </div>
-          <div class="panel-body comment-body">
-            THIS IS A COMMENT
-          </div><!-- /panel-body -->
-          </div><!-- /panel panel-default -->
-        </div><!-- /col-sm-5 -->
+        <div class="row">
+          <div class="col-sm-12">
+            <h3>Comments</h3>
+          </div><!-- /col-sm-12 -->
+        </div><!-- /row -->
+      <div style=“display: none”>
+        <div id="comment-template">
+          <div class="row comment-box">
+            <div class="col-sm-1">
+              <div class="thumbnail">
+                <img class="img-responsive user-photo" src="">
+              </div><!-- /thumbnail -->
+            </div><!-- /col-sm-1 -->
+          <div class="col-sm-5">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <strong class="name"></strong> 
+              </div>
+            <div class="panel-body comment-body">
+            </div><!-- /panel-body -->
+            </div><!-- /panel panel-default -->
+          </div><!-- /col-sm-5 -->
+        </div>
       </div>
       <div class="comments">
         {% for comment in comments %}
         <div class="row comment-box">
           <div class="col-sm-1">
-          <div class="thumbnail">
-          <img class="img-responsive user-photo" src="{{ comment.user.profile_image }}">
-          </div><!-- /thumbnail -->
+            <div class="thumbnail">
+              <img class="img-responsive user-photo" src="{{ comment.user.profile_image }}">
+            </div><!-- /thumbnail -->
           </div><!-- /col-sm-1 -->
           <div class="col-sm-5">
             <div class="panel panel-default">
@@ -198,7 +193,8 @@
         // Click event handler for comments
         $('#submit').click(function(event) {
           event.preventDefault();
-
+          console.log("Here?");
+          
           var comment = $('#comment').val();
           
           $.ajax({
@@ -206,14 +202,15 @@
                data: $('form').serialize(),
                type: 'POST',
                success: function(response) {
-                
-                console.log(response);
-                comment = response.comment;
+                comment = response.comment; 
+                var image = response.profile_image;
+                var name = response.user_name;
 
                 var new_comment = $("#comment-template").clone();
 
                 new_comment.find(".comment-body").text(comment);
-
+                new_comment.find(".user-photo").attr("src", image);
+                new_comment.find(".name").text(name);
                 $('.comments').prepend(new_comment);
 
                },
