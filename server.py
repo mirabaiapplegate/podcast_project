@@ -39,6 +39,10 @@ def work(podcast_id):
     """Show carousel images"""
     image_data = db.session.query(Event.image_url, Event.start_at, Event.end_at).filter(Event.podcast_id==podcast_id).all()
     images = []
+    podcast = Podcast.query.get(podcast_id)
+    title_image = podcast.image
+    title_attrs = { "image_url": title_image, "start_at": 0, "end_at": 0 }
+    images.append(title_attrs)
 
     for data in image_data:
         image_attrs = { "image_url": data[0], "start_at": data[1], "end_at": data[2] }

@@ -41,7 +41,6 @@
   height:auto;
 }
 
-
 /* Declare heights because of positioning of img element */
 .carousel .item {
   max-height: 100%;
