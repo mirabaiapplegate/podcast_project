@@ -1,16 +1,5 @@
-* {
-    margin: 0;
-}
-html, body {
-    height: 100%;
-    width: 100%;
-}
 
 #profile-image {
     height: 50px;
     width: 50px;
-}
-#footer{
-    position:fixed; 
-    bottom:0;
 }
