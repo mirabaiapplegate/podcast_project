@@ -8,8 +8,12 @@
 
     <!-- Podcast Title and Episode -->
     <div class="col-md-12 col-lg-12 col-xs-12">
+
       <h4>{{ podcast.show }}: {{ podcast.title }}</h4>
       <p>{{ podcast.description }}</p>
+      <audio id="audio" controls>
+        <source src="{{ podcast.audio }}" class="player_audio" type="audio/mpeg">
+      </audio>
       <!-- Start Carousel -->
       <div id="carousel-image" class="carousel slide" data-ride="carousel" data-interval="false">
         <!-- Indicators -->
@@ -60,6 +64,7 @@
           </div><!-- /col-sm-5 -->
         </div>
       </div>
+
       <div class="comments">
         {% for comment in comments %}
         <div class="row comment-box">
@@ -108,24 +113,26 @@
           $('.item').first().addClass('active');
           $('.carousel-indicators > li').first().addClass('active');
           $('#carousel-image').carousel();
+          var audio = document.getElementById('audio');
+          console.log(audio);
+          
+          audio.addEventListener('timeupdate', function(event) { 
+            var currentPos = event.path[0].currentTime;
+            console.log("here?");
 
-          // Amplitude.active.addEventListener('timeupdate', function(event) { 
-          //   var currentPos = event.path[0].currentTime;
-
-          //   $.each(result.data, function (i, image_attrs) {
-          //     if(currentPos >= image_attrs.start_at && currentPos <= image_attrs.end_at) {
-          //       // $('#my-iframe').attr('href', image_attrs.image_url)
-          //       $('#carousel-image').carousel(i);
-          //     }
-          //   });
-          // });
+            $.each(result.data, function (i, image_attrs) {
+              if(currentPos >= image_attrs.start_at && currentPos <= image_attrs.end_at) {
+                // $('#my-iframe').attr('href', image_attrs.image_url)
+                $('#carousel-image').carousel(i);
+              }
+            });
+          });
         });
 
         
         // Click event handler for comments
         $('#submit').click(function(event) {
           event.preventDefault();
-          console.log("Here?");
           
           var comment = $('#comment').val();
           
