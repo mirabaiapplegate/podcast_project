@@ -5,15 +5,20 @@
 {% endblock%}
 
 {% block body %}
-
+  <!-- Podcast body row -->
+  <div class="row">
     <!-- Podcast Title and Episode -->
-    <div class="col-md-12 col-lg-12 col-xs-12">
+    <div class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2 col-xs-12">
 
       <h4>{{ podcast.show }}: {{ podcast.title }}</h4>
       <p>{{ podcast.description }}</p>
+
+      <!-- Audio -->
       <audio id="audio" controls>
         <source src="{{ podcast.audio }}" class="player_audio" type="audio/mpeg">
       </audio>
+      <!-- End Audio -->
+
       <!-- Start Carousel -->
       <div id="carousel-image" class="carousel slide" data-ride="carousel" data-interval="false">
         <!-- Indicators -->
@@ -24,9 +29,15 @@
           <!-- TODO How to render event.link??!?!?! -->
           </div>
         </div>
-        <!-- Controls -->
-    
+      </div>
+      <!-- End Carousel -->
+    </div><!-- End columns -->
+  </div><!-- End row -->
 
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 col-xs-12"
+
+      <!-- Comment Form -->
       <form class="form-inline" action="/addComment" method="post" role="form">
         <div class="form-group">
           <img class="img-responsive img-rounded" src="{{ user.profile_image }}" id="comment-profile-image">
@@ -38,13 +49,15 @@
 
         <button type="submit" class="btn btn-primary" id="submit">Submit</button>
       </form>
+      <!-- End Comment Form -->
+      <div class="row">
+        <div class="">
+          <h3>Comments</h3>
+        </div><!-- /col-sm-12 -->
+      </div><!-- /row -->
 
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12">
-            <h3>Comments</h3>
-          </div><!-- /col-sm-12 -->
-        </div><!-- /row -->
+
+      <!-- Comment Template -->
       <div style=“display: none”>
         <div id="comment-template">
           <div class="row comment-box">
@@ -64,7 +77,9 @@
           </div><!-- /col-sm-5 -->
         </div>
       </div>
+      <!-- End Comment Template -->
 
+      <!-- Comments -->
       <div class="comments">
         {% for comment in comments %}
         <div class="row comment-box">
@@ -84,82 +99,81 @@
             </div><!-- /panel panel-default -->
           </div><!-- /col-sm-5 -->
         </div><!-- /row -->
-
         {% endfor %}
       </div>
-
-      </div><!-- /container -->
-
+      <!-- End Comments -->
     </div>
-    <!-- End Carousel -->
+    <!-- End columns -->
+  </div>
+  <!-- End row -->
+
     {% endblock %}
 
-    <!-- Javascript -->
-    {% block js %}
-      <script> 
-        "use strict";
-        // Wait until page has loaded
-        $(document).ready(function() {
+<!-- Javascript -->
+{% block js %}
+  <script> 
+    "use strict";
+    // Wait until page has loaded
+    $(document).ready(function() {
 
-        // Get an object of arrays of urls
-        $.get('/images/{{ podcast.podcast_id }}.json', function(result) {
-          
-          $.each(result.data, function(i, image_attrs) {
-            $('<div class="item"><img src="'+image_attrs.image_url+'" class="img-responsive center-block"><div class="carousel-caption"></div></div>').appendTo('.carousel-inner');
-            
-            $('<li data-target="#carousel-image" data-slide-to="'+i+'"></li>').appendTo('.carousel-indicators');
-          });
-
-          $('.item').first().addClass('active');
-          $('.carousel-indicators > li').first().addClass('active');
-          $('#carousel-image').carousel();
-          var audio = document.getElementById('audio');
-          console.log(audio);
-          
-          audio.addEventListener('timeupdate', function(event) { 
-            var currentPos = event.path[0].currentTime;
-            console.log("here?");
-
-            $.each(result.data, function (i, image_attrs) {
-              if(currentPos >= image_attrs.start_at && currentPos <= image_attrs.end_at) {
-                // $('#my-iframe').attr('href', image_attrs.image_url)
-                $('#carousel-image').carousel(i);
-              }
-            });
-          });
-        });
-
+    // Get an object of arrays of urls
+    $.get('/images/{{ podcast.podcast_id }}.json', function(result) {
+      
+      $.each(result.data, function(i, image_attrs) {
+        $('<div class="item"><img src="'+image_attrs.image_url+'" class="img-responsive center-block"><div class="carousel-caption"></div></div>').appendTo('.carousel-inner');
         
-        // Click event handler for comments
-        $('#submit').click(function(event) {
-          event.preventDefault();
-          
-          var comment = $('#comment').val();
-          
-          $.ajax({
-               url: '/addComment',
-               data: $('form').serialize(),
-               type: 'POST',
-               success: function(response) {
-                comment = response.comment; 
-                var image = response.profile_image;
-                var name = response.user_name;
+        $('<li data-target="#carousel-image" data-slide-to="'+i+'"></li>').appendTo('.carousel-indicators');
+      });
 
-                var new_comment = $("#comment-template").clone();
+      $('.item').first().addClass('active');
+      $('.carousel-indicators > li').first().addClass('active');
+      $('#carousel-image').carousel();
+      
+      var audio = document.getElementById('audio');
+      
+      audio.addEventListener('timeupdate', function(event) { 
+        var currentPos = event.path[0].currentTime;
 
-                new_comment.find(".comment-body").text(comment);
-                new_comment.find(".user-photo").attr("src", image);
-                new_comment.find(".name").text(name);
-                $('.comments').prepend(new_comment);
-
-               },
-               error: function(error) {
-                   console.log(error);
-               }
-           });
-
+        $.each(result.data, function (i, image_attrs) {
+          if(currentPos >= image_attrs.start_at && currentPos <= image_attrs.end_at) {
+            // $('#my-iframe').attr('href', image_attrs.image_url)
+            $('#carousel-image').carousel(i);
+          }
         });
+      });
+    });
 
-        });
-      </script>
-    {% endblock %}
+    
+    // Click event handler for comments
+    $('#submit').click(function(event) {
+      event.preventDefault();
+      
+      var comment = $('#comment').val();
+      
+      $.ajax({
+           url: '/addComment',
+           data: $('form').serialize(),
+           type: 'POST',
+           success: function(response) {
+            comment = response.comment; 
+            var image = response.profile_image;
+            var name = response.user_name;
+
+            var new_comment = $("#comment-template").clone();
+
+            new_comment.find(".comment-body").text(comment);
+            new_comment.find(".user-photo").attr("src", image);
+            new_comment.find(".name").text(name);
+            $('.comments').prepend(new_comment);
+
+           },
+           error: function(error) {
+               console.log(error);
+           }
+       });
+
+    });
+
+    });
+  </script>
+{% endblock %}
