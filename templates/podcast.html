@@ -161,13 +161,10 @@
           $('#carousel-image').carousel();
 
           Amplitude.active.addEventListener('timeupdate', function(event) { 
-            console.log(event.path[0].currentTime);
             var currentPos = event.path[0].currentTime;
-            // if currentPos >= start_at && currentPos <= end_at
+
             $.each(result.data, function (i, image_attrs) {
-              console.log((currentPos >= image_attrs.start_at), (currentPos <= image_attrs.end_at));
               if(currentPos >= image_attrs.start_at && currentPos <= image_attrs.end_at) {
-                console.log("Yes!");
                 // $('#my-iframe').attr('href', image_attrs.image_url)
                 $('#carousel-image').carousel(i);
               }
