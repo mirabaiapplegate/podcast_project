@@ -37,7 +37,7 @@ def index():
 @app.route('/images/<int:podcast_id>.json')
 def work(podcast_id):
     """Show carousel images"""
-    image_data = db.session.query(Event.image_url, Event.start_at, Event.end_at, Event.link ).filter(Event.podcast_id==podcast_id).all()
+    image_data = db.session.query(Event.image_url, Event.start_at, Event.end_at, Event.link).filter(Event.podcast_id==podcast_id).all()
     images = []
     podcast = Podcast.query.get(podcast_id)
     title_image = podcast.image
@@ -134,4 +134,4 @@ if __name__ == "__main__":
     # Use the DebugToolbar
     DebugToolbarExtension(app)
 
-    app.run(port=5001)
+    app.run()

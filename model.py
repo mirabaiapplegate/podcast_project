@@ -40,6 +40,7 @@ class Podcast(db.Model):
         self.audio = audio
         self.image = image
         self.image_caption = image_caption
+      
          
 class Event(db.Model):
     """Events of podcast website."""
@@ -116,7 +117,7 @@ class User(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<User user_id=%s first_name=%s last_name=%s" % (self.user_id, 
+        return "<User user_id=%s first_name=%s last_name=%s>" % (self.user_id, 
                 self.first_name, self.last_name)
 
     def __init__(self, profile_image, first_name, last_name, email, 
