@@ -13,12 +13,6 @@
       <h4>{{ podcast.show }}: {{ podcast.title }}</h4>
       <p>{{ podcast.description }}</p>
 
-      <!-- Audio -->
-      <audio id="audio" controls>
-        <source src="{{ podcast.audio }}" class="player_audio" type="audio/mpeg">
-      </audio>
-      <!-- End Audio -->
-
       <!-- Start Carousel -->
       <div id="carousel-image" class="carousel slide" data-ride="carousel" data-interval="false">
         <!-- Indicators -->
@@ -31,6 +25,13 @@
         </div>
       </div>
       <!-- End Carousel -->
+
+      <!-- Audio -->
+      <audio id="audio" controls>
+        <source src="{{ podcast.audio }}" class="player_audio" type="audio/mpeg">
+      </audio>
+      <!-- End Audio -->
+      
     </div><!-- End columns -->
   </div><!-- End row -->
 
