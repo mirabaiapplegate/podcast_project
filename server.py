@@ -24,7 +24,7 @@ app.jinja_env.undefined = StrictUndefined
 
 @app.route('/')
 def index():
-    """Homepage"""
+    """ Homepage """
 
     podcasts = Podcast.query.all()
     #Only selects first user. 
@@ -36,7 +36,7 @@ def index():
 
 @app.route('/images/<int:podcast_id>.json')
 def work(podcast_id):
-    """Show carousel images"""
+    """ Show carousel images """
     image_data = db.session.query(Event.image_url, Event.start_at, Event.end_at, Event.link).filter(Event.podcast_id==podcast_id).all()
     images = []
     podcast = Podcast.query.get(podcast_id)
@@ -56,9 +56,7 @@ def work(podcast_id):
 
 @app.route('/<int:podcast_id>')
 def podcast(podcast_id):
-    """Show podcast user has selected"""
-    # TODO I don't think this events query is being used for anything...
-    events = Event.query.filter(Event.podcast_id==podcast_id)
+    """ Show podcast user has selected """
     podcast = Podcast.query.get(podcast_id)
     comments = Comment.query.filter(Comment.podcast_id==podcast_id)
 
@@ -66,7 +64,7 @@ def podcast(podcast_id):
     user = User.query.first()
     user_id = user.user_id
 
-    return render_template("podcast.html", events=events, comments=comments, podcast=podcast, user=user, user_id=user_id)
+    return render_template("podcast.html", comments=comments, podcast=podcast, user=user, user_id=user_id)
 
 @app.route('/planet_money')
 def planet_money():
@@ -105,7 +103,7 @@ def planet_money():
 
 @app.route('/addComment', methods=['POST'])
 def add_comment():
-    """Add comment to db"""
+    """ Add comment to db """
 
     comment =  request.form['comment']
     podcast_id = 3
@@ -122,6 +120,19 @@ def add_comment():
 
     return jsonify(comment=comment, profile_image=profile_image, user_name=user_name)
 
+@app.route('/profile')
+def profile():
+    """ Show user profile """
+
+    user = User.query.first()
+
+    return render_template("profile.html", user=user)
+
+@app.route()
+def update_profile():
+    """ Update user profile """
+
+    
 
 
 if __name__ == "__main__":
