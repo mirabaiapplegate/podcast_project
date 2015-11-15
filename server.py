@@ -128,12 +128,6 @@ def profile():
 
     return render_template("profile.html", user=user)
 
-@app.route()
-def update_profile():
-    """ Update user profile """
-
-    
-
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
