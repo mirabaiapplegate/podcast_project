@@ -128,6 +128,13 @@ def profile():
 
     return render_template("profile.html", user=user)
 
+@app.route('/upload')
+def upload_podcast():
+    """ Show user podcast upload form """
+
+    user = User.query.first()
+
+    return render_template("upload.html", user=user)
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
