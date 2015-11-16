@@ -101,12 +101,11 @@ def planet_money():
 
         print "Success!"
 
-@app.route('/addComment', methods=['POST'])
-def add_comment():
+@app.route('/podcast/<int:podcast_id>/addComment', methods=['POST'])
+def add_comment(podcast_id):
     """ Add comment to db """
 
     comment =  request.form['comment']
-    podcast_id = 3
     user_id = 1
     user = User.query.get(user_id)
     profile_image = user.profile_image

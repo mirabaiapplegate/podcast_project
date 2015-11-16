@@ -148,9 +148,9 @@
       event.preventDefault();
       
       var comment = $('#comment').val();
-      
+
       $.ajax({
-           url: '/addComment',
+           url: '/podcast/{{ podcast.podcast_id }}/addComment',
            data: $('form').serialize(),
            type: 'POST',
            success: function(response) {
@@ -164,7 +164,7 @@
             new_comment.find(".user-photo").attr("src", image);
             new_comment.find(".name").text(name);
             $('.comments').prepend(new_comment);
-
+            $(new_comment).show();
            },
            error: function(error) {
                console.log(error);
