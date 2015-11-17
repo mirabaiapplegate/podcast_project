@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% block body %}
+<form class="form-horizontal" role="form" action="/podcasts" method="POST">
+  <div class="container" style="padding-top: 60px;">
+    <h1 class="page-header">Upload Podcast</h1>
+    <div class="row">
+      <!-- edit form column -->
+      <div class="col-md-8 col-sm-6 col-xs-12">
+        <h3>Podcast Info</h3>
+         
+        <div class="form-group">
+          <label class="col-lg-3 control-label">Show:</label>
+          <div class="col-lg-8">
+            <input class="form-control" name="show" type="text">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-lg-3 control-label">Episode Title:</label>
+          <div class="col-lg-8">
+            <input class="form-control" name="title" type="text">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-lg-3 control-label">Description:</label>
+          <div class="col-lg-8">
+            <input class="form-control" name="description" type="text">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-3 control-label">Audio Link:</label>
+          <div class="col-md-8">
+            <input class="form-control" name="audio" type="text">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-3 control-label">Image Link:</label>
+          <div class="col-md-8">
+            <input class="form-control" name="image" type="text">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-3 control-label">Image Caption:</label>
+          <div class="col-md-8">
+            <input class="form-control" name="caption" type="text">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="js-resources">
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <button class="btn btn-default js-add-new-resources">&plus; Resource</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="col-md-3 control-label"></label>
+          <div class="col-md-8">
+            <input class="btn btn-primary" id="submit" value="Next" type="submit">
+            <span></span>
+            <a class="btn btn-default" href="/" value="Cancel" type="reset" role="button">Cancel</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div class="js-resource-template" style="display: none;">
+  <div class="container" style="padding-top: 60px;">
+    <div class="row">
+      <!-- edit form column -->
+      <div class="col-md-8 col-sm-6 col-xs-12">
+        <h3>New Resource</h3>
+        <div class="form-group">
+          <label class="col-lg-3 control-label">Image URL:</label>
+          <div class="col-lg-8">
+            <input class="form-control" name="resource_id_image" type="text">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-lg-3 control-label">External URL:</label>
+          <div class="col-lg-8">
+            <input class="form-control" name="resource_id_external-url" type="text">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-3 control-label">Start At:</label>
+          <div class="col-md-8">
+            <input class="form-control" name="resource_id_start" type="text">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-3 control-label">End At:</label>
+          <div class="col-md-8">
+            <input class="form-control" name="resource_id_end" type="text">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+  $(function () {
+    cloneResource();
+    $('.js-add-new-resources').on('click', function(event) {
+      event.preventDefault();
+      cloneResource();
+    });
+  });
+
+  function cloneResource() {
+    var resourceTemplate = $('.js-resource-template').clone();
+    $('.js-resources').append(resourceTemplate);
+    
+    var count = $('.js-resource').length;
+
+    $(resourceTemplate).find('.form-control').each(function (index, el) {
+      var name = $(el).attr('name');
+      name = name.replace('_id_','_' + count + '_');
+      $(el).attr('name', name);
+    });
+    $(resourceTemplate).removeClass('js-resource-template').addClass('js-resource').show();
+  }
+
+</script>
+{% endblock %}
+
+

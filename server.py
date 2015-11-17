@@ -26,6 +26,10 @@ app.jinja_env.undefined = StrictUndefined
 def root_route():
     return redirect('/podcasts')
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
 @app.route('/podcasts')
 def podcasts_index():
     """ Homepage """

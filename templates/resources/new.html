@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container" style="padding-top: 60px;">
+  <h1 class="page-header">Upload Resources for Podcast</h1>
+    <div class="row">
+      <!-- edit form column -->
+      <div class="col-md-8 col-sm-6 col-xs-12">
+        <h3>Resource Info</h3>
+        <form class="form-horizontal" role="form" action="/podcasts" method="POST">
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Image URL:</label>
+            <div class="col-lg-8">
+              <input class="form-control" name="image" type="text">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-3 control-label">External URL:</label>
+            <div class="col-lg-8">
+              <input class="form-control" name="external-url" type="text">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label">Start At:</label>
+            <div class="col-md-8">
+              <input class="form-control" name="start" type="text">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label">End At:</label>
+            <div class="col-md-8">
+              <input class="form-control" name="end" type="text">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-3 control-label"></label>
+            <div class="col-md-8">
+              <input class="btn btn-primary" id="submit" value="Next" type="submit">
+              <span></span>
+              <a class="btn btn-default" href="/" value="Cancel" type="reset" role="button">Cancel</a>
+            </div>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
