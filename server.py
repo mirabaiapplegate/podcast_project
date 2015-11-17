@@ -53,7 +53,6 @@ def work(podcast_id):
     return jsonify(result)
 
 
-
 @app.route('/<int:podcast_id>')
 def podcast(podcast_id):
     """ Show podcast user has selected """
@@ -65,6 +64,7 @@ def podcast(podcast_id):
     user_id = user.user_id
 
     return render_template("podcast.html", comments=comments, podcast=podcast, user=user, user_id=user_id)
+
 
 @app.route('/planet_money')
 def planet_money():
@@ -101,6 +101,7 @@ def planet_money():
 
         print "Success!"
 
+
 @app.route('/podcast/<int:podcast_id>/addComment', methods=['POST'])
 def add_comment(podcast_id):
     """ Add comment to db """
@@ -119,6 +120,7 @@ def add_comment(podcast_id):
 
     return jsonify(comment=comment, profile_image=profile_image, user_name=user_name)
 
+
 @app.route('/profile')
 def profile():
     """ Show user profile """
@@ -127,13 +129,34 @@ def profile():
 
     return render_template("profile.html", user=user)
 
-@app.route('/upload')
-def upload_podcast():
+
+@app.route('/podcasts_new')
+def new_podcast():
     """ Show user podcast upload form """
 
     user = User.query.first()
 
-    return render_template("upload.html", user=user)
+    return render_template("podcast_new.html", user=user)
+
+
+@app.route('/podcasts', methods=['POST'])
+def save_podcast():
+    """ Add podcast to db """
+
+    title = request.form['title']
+    show = request.form['show']
+    description = request.form['description']
+    audio = request.form['audio']
+    image = request.form['image']
+    caption = request.form['caption']
+
+    new_podcast = Podcast(title, show, description, audio, image, caption)
+
+    db.session.add(new_podcast)
+    db.session.commit()
+
+    return redirect('/')
+
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
