@@ -9,6 +9,7 @@ from json import dumps
 from model import Podcast, Event, User, Comment, connect_to_db, db
 import requests
 import os
+import re
 
 # Import NPR API KEY
 npr_auth_token = os.environ['NPR_AUTH_TOKEN']
@@ -21,22 +22,25 @@ app.secret_key = "ABC"
 # Prevent jinja from failing silently
 app.jinja_env.undefined = StrictUndefined
 
-
 @app.route('/')
-def index():
+def root_route():
+    return redirect('/podcasts')
+
+@app.route('/podcasts')
+def podcasts_index():
     """ Homepage """
 
     podcasts = Podcast.query.all()
     #Only selects first user. 
     user = User.query.first()
 
-
-    return render_template("index.html", podcasts=podcasts, user=user)
+    return render_template("podcasts/index.html", podcasts=podcasts, user=user)
 
 
 @app.route('/images/<int:podcast_id>.json')
-def work(podcast_id):
+def show_image_json(podcast_id):
     """ Show carousel images """
+
     image_data = db.session.query(Event.image_url, Event.start_at, Event.end_at, Event.link).filter(Event.podcast_id==podcast_id).all()
     images = []
     podcast = Podcast.query.get(podcast_id)
@@ -53,9 +57,10 @@ def work(podcast_id):
     return jsonify(result)
 
 
-@app.route('/<int:podcast_id>')
-def podcast(podcast_id):
+@app.route('/podcasts/<int:podcast_id>')
+def show_podcast(podcast_id):
     """ Show podcast user has selected """
+
     podcast = Podcast.query.get(podcast_id)
     comments = Comment.query.filter(Comment.podcast_id==podcast_id)
 
@@ -63,7 +68,7 @@ def podcast(podcast_id):
     user = User.query.first()
     user_id = user.user_id
 
-    return render_template("podcast.html", comments=comments, podcast=podcast, user=user, user_id=user_id)
+    return render_template("podcasts/show.html", comments=comments, podcast=podcast, user=user, user_id=user_id)
 
 
 @app.route('/planet_money')
@@ -130,18 +135,18 @@ def profile():
     return render_template("profile.html", user=user)
 
 
-@app.route('/podcasts_new')
+@app.route('/podcasts/new')
 def new_podcast():
     """ Show user podcast upload form """
 
     user = User.query.first()
 
-    return render_template("podcast_new.html", user=user)
+    return render_template("podcasts/new.html", user=user)
 
 
 @app.route('/podcasts', methods=['POST'])
-def save_podcast():
-    """ Add podcast to db """
+def create_podcast():
+    """ Create podcast """
 
     title = request.form['title']
     show = request.form['show']
@@ -150,12 +155,51 @@ def save_podcast():
     image = request.form['image']
     caption = request.form['caption']
 
+    attrs = {}
+
+    for key in request.form:
+        values = key.split('_')
+        if values[0] == 'resource':
+            if values[1] not in attrs:
+                attrs[values[1]] = {}
+            
+            attrs[values[1]][values[2]] = request.form[key]
+
     new_podcast = Podcast(title, show, description, audio, image, caption)
 
     db.session.add(new_podcast)
     db.session.commit()
+    id = str(new_podcast.podcast_id)
 
-    return redirect('/')
+    for index in attrs:
+        start = attrs[index]['start']
+        end = attrs[index]['end']
+        image = attrs[index]['image']
+        external_url = attrs[index]['external-url']
+        new_resource = Event(start, end, image, external_url, new_podcast.podcast_id)
+        db.session.add(new_resource)
+        db.session.commit()
+
+    return redirect("/podcasts/" + id)
+
+
+@app.route('/podcasts/<int:podcast_id>/resources', methods=['POST'])
+def save_podcast(podcast_id):
+    """ Add resource to db """
+
+    image = request.form['image']
+    external_resource = request.form['external-url']
+    start = request.form['start']
+    end = request.form['end']
+
+    new_resource = Event(start, end, image, external_resource, podcast_id)
+
+    db.session.add(new_resource)
+    db.session.commit()
+
+
+    return redirect('/podcasts/' + podcast_id)
+
 
 
 if __name__ == "__main__":
