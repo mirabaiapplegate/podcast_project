@@ -93,9 +93,14 @@
                   'Thanks for logging in, ' + response.name + '!';
               });
             }
+            function logout() {
+                FB.logout(function(response) {
+                    document.location.reload();
+                });
+            }
 
         </script>
-          <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+          <fb:login-button scope="public_profile,email" onlogin="checkLoginState();" data-auto-logout-link="True">
           </fb:login-button>
 
           <div id="status">
