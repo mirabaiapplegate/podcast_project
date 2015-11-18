@@ -34,7 +34,7 @@ def login():
 def podcasts_index():
     """ Homepage """
 
-    podcasts = Podcast.query.all()
+    podcasts = Podcast.query.order_by(Podcast.podcast_id.desc())
     #Only selects first user. 
     user = User.query.first()
 
@@ -66,7 +66,7 @@ def show_podcast(podcast_id):
     """ Show podcast user has selected """
 
     podcast = Podcast.query.get(podcast_id)
-    comments = Comment.query.filter(Comment.podcast_id==podcast_id)
+    comments = Comment.query.filter(Comment.podcast_id==podcast_id).order_by(Comment.comment_id.desc())
 
     #Only selects first user. 
     user = User.query.first()
