@@ -165,6 +165,7 @@
             new_comment.find(".name").text(name);
             $('.comments').prepend(new_comment);
             $(new_comment).show();
+            $('#comment').val("");
            },
            error: function(error) {
                console.log(error);
