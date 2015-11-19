@@ -9,7 +9,6 @@ from json import dumps
 from model import Podcast, Event, User, Comment, connect_to_db, db
 import requests
 import os
-import re
 
 # Import NPR API KEY
 npr_auth_token = os.environ['NPR_AUTH_TOKEN']
@@ -26,26 +25,42 @@ app.jinja_env.undefined = StrictUndefined
 def root_route():
     return redirect('/podcasts')
 
+
 @app.route('/login')
 def login():
     return render_template('login.html')
+
+
+@app.route('/fb-login', methods=['POST'])
+def fb_login():
+    user_name   = request.form['user_name']
+    facebook_id = request.form['facebook_id']
+
+    # TODO Lookup User
+    user = User.query.filter(User.facebook==facebook_id)
+    image = None
+    email = None
+    password = None
+
+    # TODO If doesn't exist ... create
+    if user == None:
+        user = User(image, user_name, email, password, facebook_id)
+        db.session.add(user)
+        db.session.commit()
+
+    session['user_id'] = user.user_id
+
+    return redirect("/podcasts")
 
 @app.route('/podcasts')
 def podcasts_index():
     """ Homepage """
 
     podcasts = Podcast.query.order_by(Podcast.podcast_id.desc())
-    #Only selects first user. 
+    
     user = User.query.first()
 
     return render_template("podcasts/index.html", podcasts=podcasts, user=user)
-
-@app.route('/comments')
-def comments():
-    """ Show comments """
-    user = User.query.first()
-
-    return render_template('comment.html', user=user)
 
 
 @app.route('/images/<int:podcast_id>.json')
@@ -72,10 +87,10 @@ def show_image_json(podcast_id):
 def show_podcast(podcast_id):
     """ Show podcast user has selected """
 
+
     podcast = Podcast.query.get(podcast_id)
     comments = Comment.query.filter(Comment.podcast_id==podcast_id).order_by(Comment.comment_id.desc())
 
-    #Only selects first user. 
     user = User.query.first()
     user_id = user.user_id
 
@@ -128,7 +143,7 @@ def add_comment(podcast_id):
     user_id = 1
     user = User.query.get(user_id)
     profile_image = user.profile_image
-    user_name = user.first_name + ' ' + user.last_name
+    name = user.name
     
     # Add comment to db
     new_comment = Comment(comment, podcast_id, user_id)
@@ -226,9 +241,12 @@ def save_podcast(podcast_id):
     db.session.add(new_resource)
     db.session.commit()
 
-
     return redirect('/podcasts/' + podcast_id)
 
+
+# def auth_facebook(session):
+    # if session['user_id']:
+        
 
 
 if __name__ == "__main__":

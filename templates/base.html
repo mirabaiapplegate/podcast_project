@@ -89,8 +89,17 @@
               console.log('Welcome!  Fetching your information.... ');
               FB.api('/me', function(response) {
                 console.log('Successful login for: ' + response.name);
-                document.getElementById('status').innerHTML =
-                  'Thanks for logging in, ' + response.name + '!';
+                console.log(response);
+                $.ajax({
+                  url: '/login-fb',
+                  data: { user_name: response.name, facebook_id: response.id },
+                  method: 'POST',
+                  success: function () {
+                    window.location.reload();
+                  }
+                });
+                // document.getElementById('status').innerHTML =
+                  // 'Thanks for logging in, ' + response.name + '!';
               });
             }
             function logout() {
@@ -112,25 +121,28 @@
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/">Podcast Directory</a>
                 </div>
-               
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav navbar-right">
+                
+
+                {% if user %}
+                  <div class="navbar-collapse collapse">
+                      <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <img class="img-responsive img-rounded" id="profile-image" src='{{ user.profile_image }}'>
+                          <img class="img-responsive img-rounded" id="profile-image" src='{{ user.profile_image }}'>
                         </li>
                         <li>
-                            <a href="/profile">{{ user.first_name }}</a>
+                          <a href="/profile">{{ user.name }}</a>
                         </li>
-                    </ul>
-                </div>
+                      </ul>
+                  </div>
+                {% endif %}
             </div>
         </div>
         <!-- End Navbar -->
 
         <!-- Container for body of page -->
         <div class="container-fluid">
-            {% block body %}
-            {% endblock %}
+          {% block body %}
+          {% endblock %}
         </div>
         <!-- End block body -->
 

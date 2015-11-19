@@ -108,27 +108,27 @@ class User(db.Model):
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     profile_image = db.Column(db.String(200), nullable=True)
-    first_name = db.Column(db.String(50), nullable=False)
-    last_name = db.Column(db.String(50), nullable=True)
+    name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(200), nullable=True)
     password = db.Column(db.String(200), nullable=True)
+    facebook = db.Column(db.String(200), nullable=True)
 
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<User user_id=%s first_name=%s last_name=%s>" % (self.user_id, 
-                self.first_name, self.last_name)
+        return "<User user_id=%s name=%s>" % (self.user_id, 
+                self.name)
 
-    def __init__(self, profile_image, first_name, last_name, email, 
-                password):
+    def __init__(self, profile_image, name, email, 
+                password, facebook):
         """Construct User objects"""
              
         self.profile_image = profile_image
-        self.first_name = first_name
-        self.last_name = last_name
+        self.name = name
         self.email = email
         self.password = password
+        self.facebook = facebook_id
 
      
 ##############################################################################
