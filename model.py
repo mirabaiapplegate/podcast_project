@@ -109,8 +109,6 @@ class User(db.Model):
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     profile_image = db.Column(db.String(200), nullable=True)
     name = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(200), nullable=True)
-    password = db.Column(db.String(200), nullable=True)
     facebook = db.Column(db.String(200), nullable=True)
 
 
@@ -120,14 +118,11 @@ class User(db.Model):
         return "<User user_id=%s name=%s>" % (self.user_id, 
                 self.name)
 
-    def __init__(self, profile_image, name, email, 
-                password, facebook):
+    def __init__(self, profile_image, name, facebook):
         """Construct User objects"""
              
         self.profile_image = profile_image
         self.name = name
-        self.email = email
-        self.password = password
         self.facebook = facebook_id
 
      

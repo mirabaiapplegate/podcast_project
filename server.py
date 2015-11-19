@@ -91,8 +91,11 @@ def show_podcast(podcast_id):
     podcast = Podcast.query.get(podcast_id)
     comments = Comment.query.filter(Comment.podcast_id==podcast_id).order_by(Comment.comment_id.desc())
 
-    user = User.query.first()
-    user_id = user.user_id
+    user = session.get('user_id')
+    print user
+    user_id = db.session.query(User.user_id).filter(User.user_id==user)
+    print user_id
+
 
     return render_template("podcasts/show.html", comments=comments, podcast=podcast, user=user, user_id=user_id)
 
