@@ -40,6 +40,13 @@ def podcasts_index():
 
     return render_template("podcasts/index.html", podcasts=podcasts, user=user)
 
+@app.route('/comments')
+def comments():
+    """ Show comments """
+    user = User.query.first()
+
+    return render_template('comment.html', user=user)
+
 
 @app.route('/images/<int:podcast_id>.json')
 def show_image_json(podcast_id):
@@ -111,23 +118,41 @@ def planet_money():
         print "Success!"
 
 
-@app.route('/podcast/<int:podcast_id>/addComment', methods=['POST'])
+@app.route('/podcasts/<int:podcast_id>/comments', methods=['POST'])
 def add_comment(podcast_id):
     """ Add comment to db """
 
-    comment =  request.form['comment']
+    comment =  request.form['text']
+
+    # I am desperate
     user_id = 1
     user = User.query.get(user_id)
     profile_image = user.profile_image
     user_name = user.first_name + ' ' + user.last_name
+    
     # Add comment to db
     new_comment = Comment(comment, podcast_id, user_id)
-
     
     db.session.add(new_comment)
     db.session.commit()
 
-    return jsonify(comment=comment, profile_image=profile_image, user_name=user_name)
+    return redirect('/podcasts/' + str(podcast_id) + '/comments')
+
+
+@app.route('/podcasts/<int:podcast_id>/comments')
+def comments_index(podcast_id):
+    comments = Comment.query.filter(Comment.podcast_id==podcast_id)
+    comment_data = []
+
+    for comment in comments:
+        author = comment.user.first_name + ' ' + comment.user.last_name
+        text = comment.comment
+        key = comment.comment_id
+        data = { 'key': key, 'author': author, 'text': text}
+        comment_data.append(data)
+
+
+    return jsonify(data=comment_data)
 
 
 @app.route('/profile')
