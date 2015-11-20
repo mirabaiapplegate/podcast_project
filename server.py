@@ -25,48 +25,43 @@ app.jinja_env.undefined = StrictUndefined
 def root_route():
     return redirect('/podcasts')
 
-
 @app.route('/login')
 def login():
     return render_template('login.html')
 
+@app.route('/logout')
+def logout():
+    session.clear()
+    return render_template('logout.html')
 
-@app.route('/fb-login', methods=['POST'])
-def fb_login():
-    user_name   = request.form['user_name']
-    facebook_id = request.form['facebook_id']
+@app.route('/login-fb', methods=['POST'])
+def login_fb():
+    user_name = request.form['user_name']
+    facebook = request.form['facebook_id']
 
-    # TODO Lookup User
-    user = User.query.filter(User.facebook==facebook_id)
+    user = db.session.query(User.user_id).filter(User.facebook==facebook).first()
     image = None
-    email = None
-    password = None
 
-    # TODO If doesn't exist ... create
     if user == None:
-        user = User(image, user_name, email, password, facebook_id)
+        user = User(image, user_name, facebook)
         db.session.add(user)
         db.session.commit()
 
     session['user_id'] = user.user_id
-
-    return redirect("/podcasts")
+    return jsonify("")
 
 @app.route('/podcasts')
 def podcasts_index():
     """ Homepage """
-
     podcasts = Podcast.query.order_by(Podcast.podcast_id.desc())
-    
-    user = User.query.first()
+    user_id = session.get('user_id')
+    user = db.session.query(User.name, User.profile_image).filter(User.user_id==user_id).first()
 
     return render_template("podcasts/index.html", podcasts=podcasts, user=user)
-
 
 @app.route('/images/<int:podcast_id>.json')
 def show_image_json(podcast_id):
     """ Show carousel images """
-
     image_data = db.session.query(Event.image_url, Event.start_at, Event.end_at, Event.link).filter(Event.podcast_id==podcast_id).all()
     images = []
     podcast = Podcast.query.get(podcast_id)
@@ -82,28 +77,20 @@ def show_image_json(podcast_id):
 
     return jsonify(result)
 
-
 @app.route('/podcasts/<int:podcast_id>')
 def show_podcast(podcast_id):
     """ Show podcast user has selected """
-
-
     podcast = Podcast.query.get(podcast_id)
     comments = Comment.query.filter(Comment.podcast_id==podcast_id).order_by(Comment.comment_id.desc())
 
-    user = session.get('user_id')
-    print user
-    user_id = db.session.query(User.user_id).filter(User.user_id==user)
-    print user_id
-
+    user_id = session.get('user_id')
+    user = db.session.query(User.name, User.profile_image).filter(User.user_id==user_id).first()
 
     return render_template("podcasts/show.html", comments=comments, podcast=podcast, user=user, user_id=user_id)
-
 
 @app.route('/planet_money')
 def planet_money():
     """ API call to NPR Planet Money to get 10 most recent episodes """
-    
     url = 'http://api.npr.org/query?apiKey=' + npr_auth_token + '&numResults=10&format=json&id=94427042&requiredAssets=audio&requiredAssets=text&requiredAssets=image' 
 
     r = requests.get(url)
@@ -127,7 +114,6 @@ def planet_money():
         
         audio = story['audio'][0]['format']['mp3'][0]['$text']
 
-        # Add podcast to db...
         new_podcast = Podcast(title, show, description, audio, image, image_caption) 
 
         db.session.add(new_podcast)
@@ -135,20 +121,14 @@ def planet_money():
 
         print "Success!"
 
-
 @app.route('/podcasts/<int:podcast_id>/comments', methods=['POST'])
 def add_comment(podcast_id):
     """ Add comment to db """
-
     comment =  request.form['text']
 
-    # I am desperate
-    user_id = 1
-    user = User.query.get(user_id)
-    profile_image = user.profile_image
-    name = user.name
+    user_id = session.get('user_id')
+    user = db.session.query(User.name, User.profile_image).filter(User.user_id==user_id).first()
     
-    # Add comment to db
     new_comment = Comment(comment, podcast_id, user_id)
     
     db.session.add(new_comment)
@@ -156,45 +136,39 @@ def add_comment(podcast_id):
 
     return redirect('/podcasts/' + str(podcast_id) + '/comments')
 
-
 @app.route('/podcasts/<int:podcast_id>/comments')
 def comments_index(podcast_id):
     comments = Comment.query.filter(Comment.podcast_id==podcast_id)
     comment_data = []
 
     for comment in comments:
-        author = comment.user.first_name + ' ' + comment.user.last_name
+        author = comment.user.name
         text = comment.comment
         key = comment.comment_id
         data = { 'key': key, 'author': author, 'text': text}
         comment_data.append(data)
 
-
     return jsonify(data=comment_data)
-
 
 @app.route('/profile')
 def profile():
-    """ Show user profile """
-
-    user = User.query.first()
+    """ Show user profile """ 
+    user_id = session.get('user_id')
+    user = db.session.query(User.name, User.profile_image).filter(User.user_id==user_id).first()  
 
     return render_template("profile.html", user=user)
 
-
 @app.route('/podcasts/new')
 def new_podcast():
-    """ Show user podcast upload form """
-
-    user = User.query.first()
+    """ Show user podcast upload form """ 
+    user_id = session.get('user_id')
+    user = db.session.query(User.name, User.profile_image).filter(User.user_id==user_id).first()   
 
     return render_template("podcasts/new.html", user=user)
-
 
 @app.route('/podcasts', methods=['POST'])
 def create_podcast():
     """ Create podcast """
-
     title = request.form['title']
     show = request.form['show']
     description = request.form['description']
@@ -229,11 +203,9 @@ def create_podcast():
 
     return redirect("/podcasts/" + id)
 
-
 @app.route('/podcasts/<int:podcast_id>/resources', methods=['POST'])
 def save_podcast(podcast_id):
     """ Add resource to db """
-
     image = request.form['image']
     external_resource = request.form['external-url']
     start = request.form['start']
@@ -245,12 +217,6 @@ def save_podcast(podcast_id):
     db.session.commit()
 
     return redirect('/podcasts/' + podcast_id)
-
-
-# def auth_facebook(session):
-    # if session['user_id']:
-        
-
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point

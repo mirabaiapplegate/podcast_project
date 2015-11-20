@@ -41,7 +41,7 @@
       <script type="text/babel">
         var data = [
           {% for comment in comments %}
-            { author: "{{ comment.user.first_name }} {{ comment.user.last_name }}", text: "{{ comment.comment }}" },
+            { author: "{{ comment.user.name }}", text: "{{ comment.comment }}" },
           {% endfor %}
         ];
 

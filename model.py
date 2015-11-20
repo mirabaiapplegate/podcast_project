@@ -123,7 +123,7 @@ class User(db.Model):
              
         self.profile_image = profile_image
         self.name = name
-        self.facebook = facebook_id
+        self.facebook = facebook
 
      
 ##############################################################################
