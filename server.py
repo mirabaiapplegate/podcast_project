@@ -25,12 +25,23 @@ app.jinja_env.undefined = StrictUndefined
 def root_route():
     return redirect('/podcasts')
 
+@app.route('/podcasts')
+def podcasts_index():
+    """ Homepage """
+    podcasts = Podcast.query.order_by(Podcast.podcast_id.desc())
+    user_id = session.get('user_id')
+    user = db.session.query(User.name, User.profile_image).filter(User.user_id==user_id).first()
+
+    return render_template("podcasts/index.html", podcasts=podcasts, user=user)
+
 @app.route('/login')
 def login():
+    """ Login """
     return render_template('login.html')
 
 @app.route('/logout')
 def logout():
+    """ Logout """
     session.clear()
     return render_template('logout.html')
 
@@ -49,15 +60,6 @@ def login_fb():
 
     session['user_id'] = user.user_id
     return jsonify("")
-
-@app.route('/podcasts')
-def podcasts_index():
-    """ Homepage """
-    podcasts = Podcast.query.order_by(Podcast.podcast_id.desc())
-    user_id = session.get('user_id')
-    user = db.session.query(User.name, User.profile_image).filter(User.user_id==user_id).first()
-
-    return render_template("podcasts/index.html", podcasts=podcasts, user=user)
 
 @app.route('/images/<int:podcast_id>.json')
 def show_image_json(podcast_id):
