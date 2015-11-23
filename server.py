@@ -152,14 +152,6 @@ def comments_index(podcast_id):
 
     return jsonify(data=comment_data)
 
-@app.route('/profile')
-def profile():
-    """ Show user profile """ 
-    user_id = session.get('user_id')
-    user = db.session.query(User.name, User.facebook).filter(User.user_id==user_id).first()  
-
-    return render_template("profile.html", user=user)
-
 @app.route('/podcasts/new')
 def new_podcast():
     """ Show user podcast upload form """ 

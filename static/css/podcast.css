@@ -4,7 +4,6 @@
     width: 50px;
     margin-right: 0px !important;
 }
-
 .thumbnail {
     padding:0px;
 }
@@ -40,7 +39,6 @@
   margin-bottom: 60px;
   height:auto;
 }
-
 /* Declare heights because of positioning of img element */
 .carousel .item {
   max-height: 100%;
@@ -59,22 +57,17 @@
   margin-left:auto;
   height:auto;
 }
-
 audio {
   width: 100%;
 }
-
-
 .title{
   font-size: 2em;
 }
-
 .description{
   font-size: 1.2em
 }
 .commentBox{
   width: 400px
-
 }
 .more-info {
   position: relative;
@@ -84,11 +77,9 @@ audio {
   opacity: 0;
   transition: opacity 0.5s;
 }
-
 .more-info.show {
   opacity: 0.7;
 }
-
 .content-iframe {
   border: 3px solid #000;
 }
