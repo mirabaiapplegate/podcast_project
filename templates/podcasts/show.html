@@ -19,6 +19,8 @@
 
       <!-- Start Carousel -->
       <div id="carousel-image" class="carousel slide" data-ride="carousel" data-interval="false">
+        <a class="js-more-info more-info btn btn-default btn-sm pull-right" data-toggle="modal" data-target="#content-modal">More Info</a>
+
         <!-- Indicators -->
         <ol class="carousel-indicators"></ol>
         <!-- Wrapper for slides -->
@@ -29,22 +31,31 @@
         </div>
       </div>
       <!-- End Carousel -->
-      <div class="iframe">
-        <iframe id="iframe" src=""></iframe>
-      </div>
-      <div class="links">
-    
-
-      </div>
+      
       <!-- Audio -->
       <audio id="audio" controls>
         <source src="{{ podcast.audio }}" class="player_audio" type="audio/mpeg">
       </audio>
       <!-- End Audio -->
-      
+<!--       
 
       <div class="descpt">
         <p>{{ podcast.description }}</p>
+      </div>
+ -->
+
+      <div class="modal fade" id="content-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">More Information</h4>
+            </div>
+            <div class="modal-body">
+              <iframe class="js-content-iframe content-iframe"></iframe>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Comments -->
@@ -197,10 +208,10 @@
         
         $.each(result.data, function(i, image_attrs) {
           if(image_attrs.link == null) {
-           image_attrs.link = ''
+            image_attrs.link = '';
           }
-          $('<div class="item"><img src="'+image_attrs.image_url+'" class="img-responsive center-block">').appendTo('.carousel-inner');
-          $('#iframe').attr('src', image_attrs.link);
+
+          $('<div class="item"><img src="'+image_attrs.image_url+'" class="img-responsive center-block" data-iframe-src="' + image_attrs.link + '">').appendTo('.carousel-inner');
           $('<li data-target="#carousel-image" data-slide-to="'+i+'"></li>').appendTo('.carousel-indicators');
         });
 
@@ -215,11 +226,21 @@
 
           $.each(result.data, function (i, image_attrs) {
             if(currentPos >= image_attrs.start_at && currentPos <= image_attrs.end_at) {
-              // $('#my-iframe').attr('href', image_attrs.image_url)
               $('#carousel-image').carousel(i);
             }
           });
         });
+      });
+
+      $('#carousel-image').on('slid.bs.carousel', function(event) {
+        var iframeSrc = $(event.relatedTarget).find('img').attr('data-iframe-src');
+        var $moreInfo = $('.js-more-info');
+        if(iframeSrc != '') {
+          $moreInfo.addClass('show');
+          $('.js-content-iframe').attr('src', iframeSrc);
+        } else {
+          $moreInfo.removeClass('show');
+        }
       });
     });
   </script>
