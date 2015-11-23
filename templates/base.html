@@ -33,7 +33,7 @@
                   <div class="navbar-collapse collapse">
                       <ul class="nav navbar-nav navbar-right">
                         <li>
-                          <img class="img-responsive img-rounded" id="profile-image" src='{{ user.profile_image }}'>
+                          <img class="img-responsive img-rounded" id="profile-image" src=''>
                         </li>
                         <li>
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.name }}<span class="caret"></span></a>
@@ -55,7 +55,6 @@
                       });
 
                       FB.api("/{{ user.facebook }}/picture", function (response) {
-                        console.log(response);
                         if (response && !response.error) {
                           $('#profile-image').attr('src', response.data.url);
                         }

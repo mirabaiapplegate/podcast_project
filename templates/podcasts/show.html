@@ -14,8 +14,8 @@
     <!-- Podcast Title and Episode -->
     <div class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2 col-xs-12">
 
-      <h4>{{ podcast.show }}: {{ podcast.title }}</h4>
-      <p>{{ podcast.description }}</p>
+      <h4 class="title">{{ podcast.show }}: {{ podcast.title }}</h4>
+      <p class="description">{{ podcast.description }}</p>
 
       <!-- Start Carousel -->
       <div id="carousel-image" class="carousel slide" data-ride="carousel" data-interval="false">
@@ -24,18 +24,29 @@
         <!-- Wrapper for slides -->
         <div class="carousel-inner">
           <div class="carousel-caption">
-          <!-- TODO How to render event.link??!?!?! -->
+            
           </div>
         </div>
       </div>
       <!-- End Carousel -->
+      <div class="iframe">
+        <iframe id="iframe" src=""></iframe>
+      </div>
+      <div class="links">
+    
 
+      </div>
       <!-- Audio -->
       <audio id="audio" controls>
         <source src="{{ podcast.audio }}" class="player_audio" type="audio/mpeg">
       </audio>
       <!-- End Audio -->
       
+
+      <div class="descpt">
+        <p>{{ podcast.description }}</p>
+      </div>
+
       <!-- Comments -->
       <div id="content"></div>
       <script type="text/babel">
@@ -188,8 +199,8 @@
           if(image_attrs.link == null) {
            image_attrs.link = ''
           }
-          $('<div class="item"><img src="'+image_attrs.image_url+'" class="img-responsive center-block"><div class="carousel-caption">' + image_attrs.link + '</div></div>').appendTo('.carousel-inner');
-          
+          $('<div class="item"><img src="'+image_attrs.image_url+'" class="img-responsive center-block">').appendTo('.carousel-inner');
+          $('#iframe').attr('src', image_attrs.link);
           $('<li data-target="#carousel-image" data-slide-to="'+i+'"></li>').appendTo('.carousel-indicators');
         });
 

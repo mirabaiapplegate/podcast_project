@@ -70,3 +70,29 @@
 audio {
   width: 100%;
 }
+
+
+.title{
+  font-size: 2em;
+}
+
+.description{
+  font-size: 1.2em
+}
+.commentBox{
+  width: 400px
+
+}
+
+
+.descpt{
+  width: 300px;
+}
+
+.commentForm{
+  height: 10px;
+}
+.iframe {
+  height: 300px;
+  width: 300px;
+}

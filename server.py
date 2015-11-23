@@ -86,7 +86,7 @@ def show_podcast(podcast_id):
     comments = Comment.query.filter(Comment.podcast_id==podcast_id).order_by(Comment.comment_id.desc())
 
     user_id = session.get('user_id')
-    user = db.session.query(User.name, User.profile_image).filter(User.user_id==user_id).first()
+    user = db.session.query(User.name, User.profile_image, User.facebook).filter(User.user_id==user_id).first()
 
     return render_template("podcasts/show.html", comments=comments, podcast=podcast, user=user, user_id=user_id)
 
@@ -156,7 +156,7 @@ def comments_index(podcast_id):
 def profile():
     """ Show user profile """ 
     user_id = session.get('user_id')
-    user = db.session.query(User.name, User.profile_image).filter(User.user_id==user_id).first()  
+    user = db.session.query(User.name, User.facebook).filter(User.user_id==user_id).first()  
 
     return render_template("profile.html", user=user)
 
