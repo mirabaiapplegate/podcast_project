@@ -148,7 +148,7 @@ def comments_index(podcast_id):
         text = comment.comment
         key = comment.comment_id
         data = { 'key': key, 'author': author, 'text': text}
-        comment_data.append(data)
+        comment_data.insert(0, data)
 
     return jsonify(data=comment_data)
 
