@@ -156,7 +156,7 @@ def comments_index(podcast_id):
 def new_podcast():
     """ Show user podcast upload form """ 
     user_id = session.get('user_id')
-    user = db.session.query(User.name, User.profile_image).filter(User.user_id==user_id).first()   
+    user = db.session.query(User.name, User.profile_image, User.facebook).filter(User.user_id==user_id).first()   
 
     return render_template("podcasts/new.html", user=user)
 

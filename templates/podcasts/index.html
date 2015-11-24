@@ -1,21 +1,80 @@
 {% extends 'base.html' %}
 
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="/static/css/podcasts-index.css">
+{% endblock %}
+
 {% block body %}
-    <a class="btn btn-default" href="/podcasts/new" role="button">+ Podcast</a>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Podcast Name</th>
-            <th>Show</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for podcast in podcasts %}
-            <tr>
-                <th><a href="/podcasts/{{ podcast.podcast_id }}">{{ podcast.title }}</a></th>
-                <th>{{ podcast.show }}</th>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-md-12"><a class="btn btn-default" href="/podcasts/new" role="button">+ Podcast</a></div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12 podcast-index">
+            {% for podcast in podcasts %}
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <div class="media">
+                      <div class="media-left">
+                        <a href="#" class="js-media" data-audio-url="{{ podcast.audio }}">
+                            <img class="media-object img-circle" src="{{ podcast.image }}" width="80" height="80"  alt="...">
+                            <span class="play glyphicon glyphicon-play"></span>
+                            <span class="pause glyphicon glyphicon-pause hide"></span>
+                        </a>
+                      </div>
+                      <div class="media-body">
+                        <div class="row">
+                            <div class="col-md-11">
+                                <h4 class="media-heading"><a href="/podcasts/{{ podcast.podcast_id }}">{{ podcast.title }}</a><small> - {{ podcast.show }}</small></h4>
+                                {{ podcast.description }}
+                            </div>
+                            <div class="col-md-1">
+                                
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    var audioPlayer = new Audio();   
+    $(function () {
+        $('.js-media').on('click', function (event) {
+            event.preventDefault();
+            var $media   = $(this);
+            var mediaURL = $media.attr('data-audio-url');
+
+            $('.js-media .play').removeClass('hide');
+            $('.js-media .pause').addClass('hide');
+
+            if($media.hasClass('playing')) {
+                pauseMedia();
+                $media.removeClass('playing');
+            } else {
+                playMedia($media, mediaURL);
+                $media.addClass('playing');
+            }
+
+        });
+    });
+
+    function pauseMedia () {
+        audioPlayer.pause();
+    }
+
+    function playMedia ($media, mediaURL) {
+        audioPlayer.src = mediaURL;
+
+        audioPlayer.play();
+        
+        $media.find('.play').addClass('hide');
+        $media.find('.pause').removeClass('hide');
+    }
+</script>
 {% endblock %}

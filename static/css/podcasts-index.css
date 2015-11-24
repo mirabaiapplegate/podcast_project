@@ -1,0 +1,13 @@
+.podcast-index .play, .podcast-index .pause {
+    position: relative;
+    z-index: 3;
+    top: -53px;
+    left: 30px;
+    font-size: 200%;
+    color: #fff;
+    opacity: 0.9;
+}
+
+.podcast-index .pause {
+    left: 27px;
+}
