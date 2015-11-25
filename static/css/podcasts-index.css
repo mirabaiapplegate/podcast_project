@@ -8,6 +8,28 @@
     opacity: 0.9;
 }
 
+.podcast-index .podcast-play-pause {
+    height: 80px;
+}
+
 .podcast-index .pause {
     left: 27px;
+}
+
+.podcast-index .podcast-description {
+    position: relative;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 90px;
+}
+
+.podcast-index .podcast-description:after {
+    content: "";
+    text-align: right;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 70%;
+    height: 30px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
 }
