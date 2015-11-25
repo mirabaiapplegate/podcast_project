@@ -28,7 +28,7 @@ def root_route():
 @app.route('/podcasts')
 def podcasts_index():
     """ Homepage """
-    podcasts = Podcast.query.order_by(Podcast.podcast_id.desc())
+    podcasts = Podcast.query.order_by(Podcast.podcast_id.asc())
     user_id = session.get('user_id')
     user = db.session.query(User.name, User.profile_image, User.facebook).filter(User.user_id==user_id).first()
 

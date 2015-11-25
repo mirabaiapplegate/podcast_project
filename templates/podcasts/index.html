@@ -12,58 +12,24 @@
     <div class="row">
         <div class="col-md-12 podcast-index">
             <div class="row">
-                {% for podcast in podcasts %}
-                    <div class="col-md-6">
-                        <div class="panel panel-default">
-                          <div class="panel-body">
-                            <div class="media podcast-play-pause">
-                              <div class="media-left">
-                                <a href="#" class="js-media" data-audio-url="{{ podcast.audio }}">
-                                    <img class="media-object img-circle" src="{{ podcast.image }}" width="80" height="80"  alt="...">
-                                    <span class="play glyphicon glyphicon-play"></span>
-                                    <span class="pause glyphicon glyphicon-pause hide"></span>
-                                </a>
-                              </div>
-                              <div class="media-body">
-                                <div class="row">
-                                    <div class="col-md-11 podcast-description">
-                                        <h4 class="media-heading"><a href="/podcasts/{{ podcast.podcast_id }}">{{ podcast.title }}</a><small> - {{ podcast.show }}</small></h4>
-                                        {{ podcast.description }}
-                                    </div>
-                                    <div class="col-md-1">
-                                        
-                                    </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="panel-footer podcast-metadata">
-                            <div id="carousel-image-{{ podcast.podcast_id }}" class="carousel slide" data-ride="carousel" data-interval="false">
-                              <a class="js-more-info more-info btn btn-default btn-sm pull-right" data-toggle="modal" data-target="#content-modal">More Info</a>
-
-                              <!-- Indicators -->
-                              <ol class="carousel-indicators">
-                                  {% set i = 0 %}
-                                  {% for event in podcast.event %}
-                                    <li class="{% if i == 0 %} active {% endif %}" data-target="#carousel-image-{{ podcast.podcast_id }}" data-slide-to="{{ i }}"></li>
-                                    {% set i = i + 1 %}
-                                  {% endfor %}
-                              </ol>
-                              <!-- Wrapper for slides -->
-                              <div class="carousel-inner">
-                                {% set i = 0 %}
-                                {% for event in podcast.event %}
-                                    <div class="item {% if i == 0 %} active {% endif %}">
-                                        <img src="{{ event.image_url }}" class="img-responsive center-block" data-iframe-src="{{ event.link }}" />
-                                    </div>
-                                    {% set i = i + 1 %}
-                                {% endfor %}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                    </div>
-                {% endfor %}
+                <div class="col-md-6">
+                    {% set i = 1 %}
+                    {% for podcast in podcasts %}
+                        {% if (i % 2) != 0 %}
+                            {% include "podcasts/_podcast.html" %}
+                        {% endif %}
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                </div>
+                <div class="col-md-6">
+                    {% set i = 1 %}
+                    {% for podcast in podcasts %}
+                        {% if (i % 2) == 0 %}
+                            {% include "podcasts/_podcast.html" %}
+                        {% endif %}
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
@@ -71,7 +37,26 @@
 
 {% block js %}
 <script type="text/javascript">
-    var audioPlayer = new Audio();   
+    var audioPlayer = new Audio();  
+
+    audioPlayer.addEventListener('timeupdate', function(event) { 
+      var currentPos = event.path[0].currentTime;
+
+      var $carousel = $('.mini-player.playing .carousel');
+      var $timeNodes = $carousel.find('.item');
+
+      console.log(currentPos);
+      $timeNodes.each(function (i, timeNode) {
+        var $timeNode = $(timeNode);
+        var startAt = parseInt($timeNode.attr('data-start-at'));
+        var endAt = parseInt($timeNode.attr('data-end-at'));
+
+        if(currentPos >= startAt && currentPos <= endAt) {
+             $carousel.carousel(i);
+        }
+      });
+    });
+
     $(function () {
         $('.js-media').on('click', function (event) {
             event.preventDefault();
@@ -82,12 +67,16 @@
             $('.js-media .pause').addClass('hide');
 
             if($media.hasClass('playing')) {
+                $media.parents('.mini-player').removeClass('playing');
                 pauseMedia();
                 $media.removeClass('playing');
             } else {
+                $media.parents('.mini-player').addClass('playing');
                 playMedia($media, mediaURL);
                 $media.addClass('playing');
             }
+
+
         });
         $('.carousel').carousel();
     });
