@@ -10,13 +10,11 @@
       </div>
       <div class="media-body">
         <div class="row">
-            <div class="col-md-11 podcast-description">
-                <h4 class="media-heading"><a href="/podcasts/{{ podcast.podcast_id }}">{{ podcast.title }}</a><small> - {{ podcast.show }}</small></h4>
-                {{ podcast.description }}
-            </div>
-            <div class="col-md-1">
-                
-            </div>
+          <div class="col-md-11 podcast-description">
+            <h4 class="media-heading"><a href="/podcasts/{{ podcast.podcast_id }}">{{ podcast.title }}</a><small> - {{ podcast.show }}</small></h4>
+            {{ podcast.description }}
+          </div>
+          <div class="col-md-1"></div>
         </div>
       </div>
     </div>
@@ -25,22 +23,22 @@
     <div id="carousel-image-{{ podcast.podcast_id }}" class="carousel slide" data-ride="carousel" data-interval="false">
       <!-- Indicators -->
       <ol class="carousel-indicators">
-          <li class="active" data-target="#carousel-image-{{ podcast.podcast_id }}" data-slide-to="0"></li>
-          {% set i = 0 %}
-          {% for event in podcast.event %}
-              {% set i = i + 1 %}
-            <li data-target="#carousel-image-{{ podcast.podcast_id }}" data-slide-to="{{ i }}"></li>
-          {% endfor %}
+        <li class="active" data-target="#carousel-image-{{ podcast.podcast_id }}" data-slide-to="0"></li>
+        {% set i = 0 %}
+        {% for event in podcast.event %}
+          {% set i = i + 1 %}
+          <li data-target="#carousel-image-{{ podcast.podcast_id }}" data-slide-to="{{ i }}"></li>
+        {% endfor %}
       </ol>
       <!-- Wrapper for slides -->
       <div class="carousel-inner">
-          <div class="active item" data-start-at="0" data-end-at="0">
-              <img src="{{podcast.image}}" class="img-responsive" />
-          </div>
+        <div class="active item" data-start-at="0" data-end-at="0">
+          <img src="{{podcast.image}}" class="img-responsive" />
+        </div>
         {% for event in podcast.event %}
-            <div class="item" data-start-at="{{event.start_at}}" data-end-at="{{event.end_at}}">
-                <img src="{{ event.image_url }}" class="img-responsive center-block" data-iframe-src="{{ event.link }}" />
-            </div>
+          <div class="item" data-start-at="{{event.start_at}}" data-end-at="{{event.end_at}}">
+            <img src="{{ event.image_url }}" class="img-responsive center-block" data-iframe-src="{{ event.link }}" />
+          </div>
         {% endfor %}
       </div>
     </div>

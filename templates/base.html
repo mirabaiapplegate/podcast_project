@@ -1,173 +1,183 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>{% block title %} Podcast Project {% endblock %}</title>
-        
-        <link rel="stylesheet" type="text/css" href="/static/css/base.css">
-        <!-- Bootstrap -->
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
-        
-        {% block head %}
-
-        {% endblock %}
-    </head>
+  <head>
+    <title>{% block title %} Podcast Project {% endblock %}</title>
+    <!-- Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,200,200italic,300,600,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css">
     
-    <body>
-        <!-- Navbar --> 
-        <div class="navbar navbar-inverse navbar-static-top">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="/">Podcasts</a>
-                </div>
-                <script>
-                  (function(d, s, id) {
-                    var js, fjs = d.getElementsByTagName(s)[0];
-                    if (d.getElementById(id)) return;
-                    js = d.createElement(s); js.id = id;
-                    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=787606004694670";
-                    fjs.parentNode.insertBefore(js, fjs);
-                  }(document, 'script', 'facebook-jssdk'));
-                </script>
+    {% block head %}
+    {% endblock %}
+  </head>
+    
+  <body id="body">
+    <!-- Navbar --> 
+    <div class="navbar navbar-inverse navbar-static-top">
+      <div id="header-image">
+        <div class="container-fluid">
+          <div class="navbar-header top-nav">
+            <a class="navbar-brand" href="/">Podcasts</a>
+          </div>
+          <script>
+            (function(d, s, id) {
+              var js, fjs = d.getElementsByTagName(s)[0];
+              if (d.getElementById(id)) return;
+              js = d.createElement(s); js.id = id;
+              js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=787606004694670";
+              fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+          </script>
 
-                {% if user %}
-                  <div class="navbar-collapse collapse">
-                      <ul class="nav navbar-nav navbar-right">
-                        <li>
-                          <img class="img-responsive img-rounded" id="profile-image" src=''>
-                        </li>
-                        <li>
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.name }}<span class="caret"></span></a>
-                          <ul class="dropdown-menu">
-                            <li><a href="/logout">Logout</a></li>
-                          </ul>
-                        </li>
-                      </ul>
-                  </div>
+          {% if user %}
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav navbar-right">
+                <li>
+                  <img class="img-responsive img-rounded" id="profile-image" src=''>
+                </li>
+                <li>
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.name }}<span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/logout">Logout</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <script>
+              window.fbAsyncInit = function() {
+                FB.init({
+                  appId      : 'FB_APP_SECRET',
+                  cookie     : true,  // enable cookies to allow the server to access 
+                                      // the session
+                  xfbml      : true,  // parse social plugins on this page
+                  version    : 'v2.2' // use version 2.2
+                });
+
+                FB.api("/{{ user.facebook }}/picture", function (response) {
+                  if (response && !response.error) {
+                    $('#profile-image').attr('src', response.data.url);
+                  }
+                }
+                );
+              }
+            </script>
+          {% else %}
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav navbar-right">
+                <li>
+                  <div id="fb-root"></div>
                   <script>
-                    window.fbAsyncInit = function() {
-                      FB.init({
-                        appId      : 'FB_APP_SECRET',
-                        cookie     : true,  // enable cookies to allow the server to access 
-                                            // the session
-                        xfbml      : true,  // parse social plugins on this page
-                        version    : 'v2.2' // use version 2.2
-                      });
-
-                      FB.api("/{{ user.facebook }}/picture", function (response) {
-                        if (response && !response.error) {
-                          $('#profile-image').attr('src', response.data.url);
-                        }
+                    // This is called with the results from from FB.getLoginStatus().
+                    function statusChangeCallback(response) {
+                      console.log('statusChangeCallback');
+                      console.log(response);
+                      // The response object is returned with a status field that lets the
+                      // app know the current login status of the person.
+                      // Full docs on the response object can be found in the documentation
+                      // for FB.getLoginStatus().
+                      if (response.status === 'connected') {
+                        // Logged into your app and Facebook.
+                        testAPI();
+                      } else if (response.status === 'not_authorized') {
+                        // The person is logged into Facebook, but not your app.
+                        document.getElementById('status').innerHTML = 'Please log ' +
+                          'into this app.';
+                      } else {
+                        // The person is not logged into Facebook, so we're not sure if
+                        // they are logged into this app or not.
+                        document.getElementById('status').innerHTML = 'Please log ' +
+                          'into Facebook.';
                       }
-                      );
+                    }
+
+                    // This function is called when someone finishes with the Login
+                    // Button.  See the onlogin handler attached to it in the sample
+                    // code below.
+                    function checkLoginState() {
+                      FB.getLoginStatus(function(response) {
+                        statusChangeCallback(response);
+                      });
+                    }
+
+                    window.fbAsyncInit = function() {
+                    FB.init({
+                      appId      : 'FB_APP_SECRET',
+                      cookie     : true,  // enable cookies to allow the server to access 
+                                          // the session
+                      xfbml      : true,  // parse social plugins on this page
+                      version    : 'v2.2' // use version 2.2
+                    });
+
+                    // Now that we've initialized the JavaScript SDK, we call 
+                    // FB.getLoginStatus().  This function gets the state of the
+                    // person visiting this page and can return one of three states to
+                    // the callback you provide.  They can be:
+                    //
+                    // 1. Logged into your app ('connected')
+                    // 2. Logged into Facebook, but not your app ('not_authorized')
+                    // 3. Not logged into Facebook and can't tell if they are logged into
+                    //    your app or not.
+                    //
+                    // These three cases are handled in the callback function.
+
+                    FB.getLoginStatus(function(response) {
+                      statusChangeCallback(response);
+                    });
+
+                    };
+
+                    // Here we run a very simple test of the Graph API after login is
+                    // successful.  See statusChangeCallback() for when this call is made.
+                    function testAPI() {                      
+                      FB.api('/me', function(response) {
+                        $.ajax({
+                          url: '/login-fb',
+                          data: { user_name: response.name, facebook_id: response.id },
+                          method: 'POST',
+                          success: function () {
+                            window.location.reload();
+                          }
+                        });
+
+                      });
+                    }
+                    function logout() {
+                        FB.logout(function(response) {
+                            document.location.reload();
+                        });
                     }
                   </script>
-                {% else %}
-                  <div class="navbar-collapse collapse">
-                      <ul class="nav navbar-nav navbar-right">
-                        <li>
-                          <div id="fb-root"></div>
-                          <script>
-                            // This is called with the results from from FB.getLoginStatus().
-                            function statusChangeCallback(response) {
-                              console.log('statusChangeCallback');
-                              console.log(response);
-                              // The response object is returned with a status field that lets the
-                              // app know the current login status of the person.
-                              // Full docs on the response object can be found in the documentation
-                              // for FB.getLoginStatus().
-                              if (response.status === 'connected') {
-                                // Logged into your app and Facebook.
-                                testAPI();
-                              } else if (response.status === 'not_authorized') {
-                                // The person is logged into Facebook, but not your app.
-                                document.getElementById('status').innerHTML = 'Please log ' +
-                                  'into this app.';
-                              } else {
-                                // The person is not logged into Facebook, so we're not sure if
-                                // they are logged into this app or not.
-                                document.getElementById('status').innerHTML = 'Please log ' +
-                                  'into Facebook.';
-                              }
-                            }
-
-                            // This function is called when someone finishes with the Login
-                            // Button.  See the onlogin handler attached to it in the sample
-                            // code below.
-                            function checkLoginState() {
-                              FB.getLoginStatus(function(response) {
-                                statusChangeCallback(response);
-                              });
-                            }
-
-                            window.fbAsyncInit = function() {
-                            FB.init({
-                              appId      : 'FB_APP_SECRET',
-                              cookie     : true,  // enable cookies to allow the server to access 
-                                                  // the session
-                              xfbml      : true,  // parse social plugins on this page
-                              version    : 'v2.2' // use version 2.2
-                            });
-
-                            // Now that we've initialized the JavaScript SDK, we call 
-                            // FB.getLoginStatus().  This function gets the state of the
-                            // person visiting this page and can return one of three states to
-                            // the callback you provide.  They can be:
-                            //
-                            // 1. Logged into your app ('connected')
-                            // 2. Logged into Facebook, but not your app ('not_authorized')
-                            // 3. Not logged into Facebook and can't tell if they are logged into
-                            //    your app or not.
-                            //
-                            // These three cases are handled in the callback function.
-
-                            FB.getLoginStatus(function(response) {
-                              statusChangeCallback(response);
-                            });
-
-                            };
-
-                            // Here we run a very simple test of the Graph API after login is
-                            // successful.  See statusChangeCallback() for when this call is made.
-                            function testAPI() {                      
-                              FB.api('/me', function(response) {
-                                $.ajax({
-                                  url: '/login-fb',
-                                  data: { user_name: response.name, facebook_id: response.id },
-                                  method: 'POST',
-                                  success: function () {
-                                    window.location.reload();
-                                  }
-                                });
-
-                              });
-                            }
-                            function logout() {
-                                FB.logout(function(response) {
-                                    document.location.reload();
-                                });
-                            }
-                          </script>
-                          <fb:login-button scope="public_profile,email" onlogin="checkLoginState();" data-auto-logout-link="True"></fb:login-button>
-                        </li>
-                      </ul>
-                    </div>
-                {% endif %}
+                  <fb:login-button scope="public_profile,email" onlogin="checkLoginState();" data-auto-logout-link="True"></fb:login-button>
+                </li>
+              </ul>
             </div>
+          {% endif %}
+          <div class="row">
+            <div class="col-md-2 col-md-offset-1">
+              <img src="https://s3-us-west-2.amazonaws.com/hbpodcastproject/storyStrata.png" class="img-responsive">
+            </div>
+          </div>
+          <div class="row">
+              <div class="col-md-1 col-md-offset-11"><a class="btn btn-default podcast-btn" href="/podcasts/new" role="button">+ Podcast</a></div>
+          </div>
         </div>
-        <!-- End Navbar -->
+      </div>
+    </div>
 
-        <!-- Container for body of page -->
-        <div class="container-fluid">
-          {% block body %}
-          {% endblock %}
-        </div>
-        <!-- End block body -->
+    <!-- End Navbar -->
 
-        <!-- Jquery -->
-        <script src="https://code.jquery.com/jquery.js"></script>
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
-        {% block js %}
-        {% endblock %}
-    </body>
+    <!-- Container for body of page -->
+    <div class="container-fluid">
+      {% block body %}
+      {% endblock %}
+    </div>
+    <!-- End block body -->
+
+    <!-- Jquery -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+    {% block js %}
+    {% endblock %}
+  </body>
 </html>

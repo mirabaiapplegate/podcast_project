@@ -83,3 +83,7 @@ audio {
 .content-iframe {
   border: 3px solid #000;
 }
+
+.panel {
+  border-radius: 0 !important;
+}

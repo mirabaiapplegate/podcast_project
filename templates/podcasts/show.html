@@ -16,24 +16,30 @@
 
       <h4 class="title">{{ podcast.show }}: {{ podcast.title }}</h4>
       <p class="description">{{ podcast.description }}</p>
+      <div class="panel panel-default">
+        <div class="panel-body">
 
-      <!-- Start Carousel -->
-      <div id="carousel-image" class="carousel slide" data-ride="carousel" data-interval="false">
-        <a class="js-more-info more-info btn btn-default btn-sm pull-right" data-toggle="modal" data-target="#content-modal">More Info</a>
+          <!-- Start Carousel -->
+          <div id="carousel-image" class="carousel slide" data-ride="carousel" data-interval="false">
+            <a class="js-more-info more-info btn btn-default btn-sm pull-right" data-toggle="modal" data-target="#content-modal">More Info</a>
 
-        <!-- Indicators -->
-        <ol class="carousel-indicators"></ol>
-        <!-- Wrapper for slides -->
-        <div class="carousel-inner">
+            <!-- Indicators -->
+            <ol class="carousel-indicators"></ol>
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+            </div>
+          </div>
+          <!-- End Carousel -->
+        </div>
+        <div class="panel-footer">
+          <!-- Audio -->
+          <audio id="audio" controls>
+            <source src="{{ podcast.audio }}" class="player_audio" type="audio/mpeg">
+          </audio>
+          <!-- End Audio -->
         </div>
       </div>
-      <!-- End Carousel -->
-      
-      <!-- Audio -->
-      <audio id="audio" controls>
-        <source src="{{ podcast.audio }}" class="player_audio" type="audio/mpeg">
-      </audio>
-      <!-- End Audio -->
+
 
       <div class="modal fade" id="content-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-lg" role="document">
@@ -50,133 +56,140 @@
       </div>
 
       <!-- Comments -->
-      <div id="content"></div>
-      <script type="text/babel">
-        var data = [
-          {% for comment in comments %}
-            { author: "{{ comment.user.name }}", text: "{{ comment.comment }}" },
-          {% endfor %}
-        ];
+      <div class="panel panel-default">
+        <h3 class="panel-title">Comments</h3>
 
-        var CommentBox = React.createClass({
-            // this executes exactly once during the lifecycle of the component
-            getInitialState: function() {
-               return { data: data };
-            },
-            loadCommentsFromServer: function() {
-                $.ajax({
-                    url: this.props.url,
-                    dataType: 'json',
-                    cache: false,
-                    success: function(data) {
-                        this.setState({data: data.data});
-                    }.bind(this),
-                    error: function(xhr, status, err) {
-                        console.error(this.props.url, status, err.toString());
-                    }.bind(this)
-                });
-            },
-            handleCommentSubmit: function(comment) {
-                $.ajax({
-                    url: this.props.url,
-                    dataType: 'json',
-                    type: 'POST',
-                    data: comment,
-                    success: function(data) {
-                        this.setState({data: data.data});
-                    }.bind(this),
-                    error: function(xhr, status, err) {
-                        console.error(this.props.url, status, err.toString());
-                    }.bind(this)
-                });          
-            },
-            componentDidMount: function() {
-                this.loadCommentsFromServer();
-                setInterval(this.loadCommentsFromServer, this.props.pollInterval);
-            },
-            render: function() {
-                return (
-                    <div className="commentBox">
-                        <h1>Comments</h1>
-                        <CommentForm onCommentSubmit={this.handleCommentSubmit} />
-                        <CommentList data={this.state.data} />
-                    </div>
-                );
-            }
-        });
+        <div class="panel-body">
 
-        var CommentList = React.createClass({
-            render: function() {
-                var commentNodes = this.props.data.map(function(comment) {
+          <div id="content"></div>
+          <script type="text/babel">
+            var data = [
+              {% for comment in comments %}
+                { author: "{{ comment.user.name }}", text: "{{ comment.comment }}" },
+              {% endfor %}
+            ];
+
+            var CommentBox = React.createClass({
+                // this executes exactly once during the lifecycle of the component
+                getInitialState: function() {
+                   return { data: data };
+                },
+                loadCommentsFromServer: function() {
+                    $.ajax({
+                        url: this.props.url,
+                        dataType: 'json',
+                        cache: false,
+                        success: function(data) {
+                            this.setState({data: data.data});
+                        }.bind(this),
+                        error: function(xhr, status, err) {
+                            console.error(this.props.url, status, err.toString());
+                        }.bind(this)
+                    });
+                },
+                handleCommentSubmit: function(comment) {
+                    $.ajax({
+                        url: this.props.url,
+                        dataType: 'json',
+                        type: 'POST',
+                        data: comment,
+                        success: function(data) {
+                            this.setState({data: data.data});
+                        }.bind(this),
+                        error: function(xhr, status, err) {
+                            console.error(this.props.url, status, err.toString());
+                        }.bind(this)
+                    });          
+                },
+                componentDidMount: function() {
+                    this.loadCommentsFromServer();
+                    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+                },
+                render: function() {
                     return (
-                        <Comment author={comment.author} key={comment.id}>
-                            {comment.text}
-                        </Comment>
+                        <div className="commentBox">
+                            <h1>Comments</h1>
+                            <CommentForm onCommentSubmit={this.handleCommentSubmit} />
+                            <CommentList data={this.state.data} />
+                        </div>
                     );
-                });
-
-                return (
-                    <div className="commentList">
-                        {commentNodes}
-                    </div>
-                );
-            } 
-        });
-
-        var CommentForm = React.createClass({
-            getInitialState: function() {
-                return {author: '', text: ''};
-            },
-            handleAuthorChange: function(e) {
-                this.setState({author: e.target.value});
-            },
-            handleTextChange: function(e) {
-                this.setState({text: e.target.value});
-            },
-            handleSubmit: function(e) {
-                e.preventDefault();
-                var text = this.state.text.trim();
-                if (!text) {
-                  return;
                 }
-                this.props.onCommentSubmit({text: text});
-                this.setState({text: ''});
-            },
-            render: function() {
-                return (
-                    <form className="commentForm" onSubmit={this.handleSubmit}>
-                         <input type="text" placeholder="Say something..."
-                           value={this.state.text}
-                           onChange={this.handleTextChange}/>
-                        <input type="submit" value="Post" />
-                    </form>
-                );
-            }
-        });
+            });
 
-        var Comment = React.createClass({
-            rawMarkup: function() {
-                var rawMarkup = marked(this.props.children.toString(), {sanitize: true});
-                return { __html: rawMarkup };
-            }, 
-            render: function() {
-                return (
-                    <div className="comment">
-                        <h2 className="commentAuthor">
-                            {this.props.author}
-                        </h2>
-                        <span dangerouslySetInnerHTML={this.rawMarkup()} />
-                    </div>
-                );
-            }
-        });
+            var CommentList = React.createClass({
+                render: function() {
+                    var commentNodes = this.props.data.map(function(comment) {
+                        return (
+                            <Comment author={comment.author} key={comment.id}>
+                                {comment.text}
+                            </Comment>
+                        );
+                    });
 
-        ReactDOM.render(
-            <CommentBox url="/podcasts/{{ podcast.podcast_id }}/comments" pollInterval={2000} />,
-            document.getElementById('content')
-        );
+                    return (
+                        <div className="commentList">
+                            {commentNodes}
+                        </div>
+                    );
+                } 
+            });
 
-      </script>
+            var CommentForm = React.createClass({
+                getInitialState: function() {
+                    return {author: '', text: ''};
+                },
+                handleAuthorChange: function(e) {
+                    this.setState({author: e.target.value});
+                },
+                handleTextChange: function(e) {
+                    this.setState({text: e.target.value});
+                },
+                handleSubmit: function(e) {
+                    e.preventDefault();
+                    var text = this.state.text.trim();
+                    if (!text) {
+                      return;
+                    }
+                    this.props.onCommentSubmit({text: text});
+                    this.setState({text: ''});
+                },
+                render: function() {
+                    return (
+                        <form className="commentForm" onSubmit={this.handleSubmit}>
+                             <input type="text" placeholder="Say something..."
+                               value={this.state.text}
+                               onChange={this.handleTextChange}/>
+                            <input type="submit" value="Post" />
+                        </form>
+                    );
+                }
+            });
+
+            var Comment = React.createClass({
+                rawMarkup: function() {
+                    var rawMarkup = marked(this.props.children.toString(), {sanitize: true});
+                    return { __html: rawMarkup };
+                }, 
+                render: function() {
+                    return (
+                        <div className="comment">
+                            <h2 className="commentAuthor">
+                                {this.props.author}
+                            </h2>
+                            <span dangerouslySetInnerHTML={this.rawMarkup()} />
+                        </div>
+                    );
+                }
+            });
+
+            ReactDOM.render(
+                <CommentBox url="/podcasts/{{ podcast.podcast_id }}/comments" pollInterval={2000} />,
+                document.getElementById('content')
+            );
+
+          </script>
+        </div>
+      </div>
 
     </div><!-- End columns -->
   </div><!-- End row -->
