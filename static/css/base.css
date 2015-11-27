@@ -4,17 +4,14 @@ body {
     font-weight: 200;
 } 
 
-#top-nav {
+.top-nav {
     top: 0;
-    z-index: 100;
+
     width: 100%;
     height: 50px;
     background: #1d1d1d;
     background: rgba(0,0,0,0.6);
-    font-family: "Proxima Nova";
     position: fixed;
-    transition: background .5s;
-    transform: translateZ(0px);
 }
 
 #profile-image {
