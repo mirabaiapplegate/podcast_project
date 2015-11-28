@@ -10,7 +10,7 @@ body {
     height: 50px;
     background: #1d1d1d;
     background: rgba(0,0,0,0.6);
-    position: fixed;
+    position: absolute;
 }
 
 #profile-image {
