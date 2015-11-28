@@ -29,6 +29,9 @@
         </div>
     </div>
 </div>
+
+{% include "podcasts/_modal.html" %}
+
 {% endblock %}
 
 {% block js %}
@@ -40,6 +43,7 @@
 
       var $carousel = $('.mini-player.playing .carousel');
       var $timeNodes = $carousel.find('.item');
+      var $moreInfo = $carousel.parents('.podcast-metadata').find('.js-more-info');
 
       $timeNodes.each(function (i, timeNode) {
         var $timeNode = $(timeNode);
@@ -47,7 +51,19 @@
         var endAt = parseInt($timeNode.attr('data-end-at'));
 
         if(currentPos >= startAt && currentPos <= endAt) {
-             $carousel.carousel(i);
+            $carousel.carousel(i);
+
+            var iframeSrc = $timeNode.attr('data-iframe-src');
+            
+            if(iframeSrc != '') {
+              $moreInfo.addClass('show');
+              var currentIframeSrc = $('.js-content-iframe').attr('src');
+              if(currentIframeSrc != iframeSrc) {
+                $('.js-content-iframe').attr('src', iframeSrc);
+              }
+            } else {
+              $moreInfo.removeClass('show');
+            }
         }
       });
     });

@@ -57,10 +57,14 @@
 }
 
 .mini-player.playing .podcast-metadata {
-  height: 300px;
+  height: 400px;
 }
 
 .carousel .item {
-    height: 300px;
+  height: 400px;
 }
 
+.carousel .item img {
+  height: 400px;
+  margin: 0 auto;
+}

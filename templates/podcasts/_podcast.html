@@ -36,8 +36,8 @@
           <img src="{{podcast.image}}" class="img-responsive" />
         </div>
         {% for event in podcast.event %}
-          <div class="item" data-start-at="{{event.start_at}}" data-end-at="{{event.end_at}}">
-            <img src="{{ event.image_url }}" class="img-responsive center-block" data-iframe-src="{{ event.link }}" />
+          <div class="item" data-start-at="{{event.start_at}}" data-end-at="{{event.end_at}}" data-iframe-src="{{ event.link }}">
+            <img src="{{ event.image_url }}" class="img-responsive center-block" />
           </div>
         {% endfor %}
       </div>
