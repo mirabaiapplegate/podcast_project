@@ -1,7 +1,7 @@
 """Utility file to seed podcast database from data in seed_data/"""
 
 
-from model import Podcast, Event, User, Comment, connect_to_db, db
+from model import Podcast, Event, User, connect_to_db, db
 from server import app
 
 
@@ -64,35 +64,14 @@ def load_users():
     for row in open("seed_data/u.user"):
         row = row.rstrip()
 
-        profile_image, first_name, last_name, email, password = row.split("|")
+        profile_image, name, facebook = row.split("|")
 
-        user = User(profile_image=profile_image, first_name=first_name, last_name=last_name,
-                    email=email, password=password)
+        user = User(profile_image=profile_image, name=name, facebook=facebook)
 
         # add event to session
         db.session.add(user)
 
     # Commit the add of an event
-    db.session.commit()
-
-
-def load_comments():
-    """Load comment from u.comment into database."""
-
-    print "Comment"
-
-    # Delete db to avoid duplicates
-    for row in open("seed_data/u.comment"):
-        row = row.rstrip()
-
-        comment, podcast_id, user_id = row.split("|")
-
-        comment = Comment(comment=comment, podcast_id=podcast_id, user_id=user_id)
-
-        # add comment to session
-        db.session.add(comment)
-
-    #Commit the add of a comment
     db.session.commit()
 
 
@@ -106,5 +85,4 @@ if __name__ == "__main__":
     load_podcasts()
     load_events()
     load_users()
-    load_comments()
     

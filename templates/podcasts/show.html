@@ -14,7 +14,7 @@
     <!-- Podcast Title and Episode -->
     <div class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2 col-xs-12">
 
-      <h4 class="title">{{ podcast.show }}: {{ podcast.title }}</h4>
+      <h4 class="title">{{ podcast.title }}  <small> -{{ podcast.show }}</small> </h4>
       <div class="panel panel-default">
         <div class="panel-body">
 
@@ -59,6 +59,7 @@
         <div class="col-md-6">
           <div class="panel panel-default">
             <div class="panel-body">
+              <h3>Description: </h3 >
               <p class="description">{{ podcast.description }}</p>
             </div>
           </div>
