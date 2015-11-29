@@ -53,8 +53,8 @@ class Event(db.Model):
     event_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     start_at = db.Column(db.Integer, nullable=False)
     end_at = db.Column(db.Integer, nullable=True)
-    image_url = db.Column(db.String(200), nullable=True)
-    link = db.Column(db.String(200), nullable=True)
+    image_url = db.Column(db.String(2000), nullable=True)
+    link = db.Column(db.String(2000), nullable=True)
     podcast_id = db.Column(db.Integer, db.ForeignKey('podcasts.podcast_id'))
 
     def __repr__(self):
@@ -111,7 +111,7 @@ class User(db.Model):
     __tablename__ = "users"
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    profile_image = db.Column(db.String(200), nullable=True)
+    profile_image = db.Column(db.String(2000), nullable=True)
     name = db.Column(db.String(50), nullable=False)
     facebook = db.Column(db.String(200), nullable=True)
 
