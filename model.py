@@ -20,9 +20,9 @@ class Podcast(db.Model):
     podcast_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     title = db.Column(db.String(64), nullable=False)
     show = db.Column(db.String(64), nullable=True)
-    description = db.Column(db.String(200), nullable=True)
-    audio = db.Column(db.String(200), nullable=True)
-    image = db.Column(db.String(200), nullable=True)
+    description = db.Column(db.String(2000), nullable=True)
+    audio = db.Column(db.String(2000), nullable=True)
+    image = db.Column(db.String(2000), nullable=True)
     image_caption = db.Column(db.String(2000), nullable=True)
     
     #Define relationship to an event
