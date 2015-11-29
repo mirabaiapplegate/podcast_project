@@ -16,7 +16,7 @@ npr_auth_token = os.environ['NPR_AUTH_TOKEN']
 app = Flask(__name__)
 
 # Required to use Flask sessions and the debug toolbar
-app.secret_key = "ABC"
+app.secret_key = os.environ.get("FLASK_SECRET_KEY","ABC")
 
 # Prevent jinja from failing silently
 app.jinja_env.undefined = StrictUndefined
@@ -218,10 +218,11 @@ def save_podcast(podcast_id):
 if __name__ == "__main__":
     from doctest import testmod
     if testmod().failed == 0:
-        app.debug = True
+        app.debug = False
         connect_to_db(app)
 
     # Use the DebugToolbar
     DebugToolbarExtension(app)
 
-    app.run()
+    PORT = int(os.environ.get("PORT", 5000))
+    app.run(debug=False, host="0.0.0.0", port=PORT)

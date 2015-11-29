@@ -1,5 +1,6 @@
 """Models and database functions for Podcast Storybook project."""
 
+import os
 from flask_sqlalchemy import SQLAlchemy
 import time
 from datetime import datetime
@@ -136,7 +137,7 @@ def connect_to_db(app):
     """Connect the database to our Flask app."""
 
     # Configure to use our SQLite database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///podcasts.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", 'sqlite:///podcasts.db')
     db.app = app
     db.init_app(app)
 
