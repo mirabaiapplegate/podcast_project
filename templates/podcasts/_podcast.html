@@ -3,7 +3,7 @@
     <div class="media podcast-play-pause">
       <div class="media-left">
         <a href="#" class="js-media" data-audio-url="{{ podcast.audio }}">
-            <img class="media-object img-circle" src="{{ podcast.image }}" width="80" height="80"  alt="...">
+            <img class="media-object img-circle" src="{{ podcast.image }}" width="80" height="80"  alt="Episode Image">
             <span class="play glyphicon glyphicon-play"></span>
             <span class="pause glyphicon glyphicon-pause hide"></span>
         </a>
@@ -33,11 +33,11 @@
       <!-- Wrapper for slides -->
       <div class="carousel-inner">
         <div class="active item" data-start-at="0" data-end-at="0">
-          <img src="{{podcast.image}}" class="img-responsive" />
+          <img src="{{podcast.image}}" class="img-responsive" alt="Podcast Resource Image"/>
         </div>
         {% for event in podcast.event %}
-          <div class="item" data-start-at="{{event.start_at}}" data-end-at="{{event.end_at}}" data-iframe-src="{{ event.link }}">
-            <img src="{{ event.image_url }}" class="img-responsive center-block" />
+          <div class="item" data-start-at="{{event.start_at}}" data-end-at="{{event.end_at}}">
+            <img src="{{ event.image_url }}" class="img-responsive center-block" data-iframe-src="{{ event.link }}" alt="Podcast Iframe Image"/>
           </div>
         {% endfor %}
       </div>

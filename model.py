@@ -1,6 +1,8 @@
 """Models and database functions for Podcast Storybook project."""
 
 from flask_sqlalchemy import SQLAlchemy
+import time
+from datetime import datetime
 
 # Connect to the SQLite database
 db = SQLAlchemy()
@@ -76,6 +78,7 @@ class Comment(db.Model):
 
     comment_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     comment = db.Column(db.String(1000), nullable=True)
+    created_at = db.Column(db.DateTime, default=db.func.now())
     podcast_id = db.Column(db.Integer, db.ForeignKey('podcasts.podcast_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 

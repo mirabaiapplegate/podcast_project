@@ -147,7 +147,10 @@ def comments_index(podcast_id):
         author = comment.user.name
         text = comment.comment
         key = comment.comment_id
-        data = { 'key': key, 'author': author, 'text': text}
+        profile_image = comment.user.profile_image
+        created_at = comment.created_at
+        
+        data = { 'key': key, 'author': author, 'text': text, 'author_profile_image_url': profile_image, 'created_at': created_at }
         comment_data.insert(0, data)
 
     return jsonify(data=comment_data)

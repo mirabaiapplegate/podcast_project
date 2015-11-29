@@ -68,16 +68,17 @@ audio {
 }
 
 .description{
-    font-size: 1.2em
+    font-size: 1.2em;
 }
 
 .commentBox{
     width: 600px;
 }
 
-.commentForm {
-    
+.commentList .comment-profile-image {
+    width: 45px;
 }
+
 .more-info {
     position: relative;
     top: 40px;
