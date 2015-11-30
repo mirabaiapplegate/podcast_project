@@ -21,6 +21,9 @@ class StoryStrataTestCase(unittest.TestCase):
         response = self.app.get('/podcasts')
         assert 'Podcast' in response.data
 
+    def test_form(self):
+        response = self.app.get('/podcasts/new')
+        assert 'Upload Podcast' in response.data
 
 if __name__ == '__main__':
     unittest.main()

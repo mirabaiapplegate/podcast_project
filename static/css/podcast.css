@@ -99,3 +99,6 @@ audio {
     border-radius: 0 !important;
 }
 
+.comment-text {
+    font-weight: 300;
+}
