@@ -218,11 +218,11 @@ def save_podcast(podcast_id):
 if __name__ == "__main__":
     from doctest import testmod
     if testmod().failed == 0:
-        app.debug = False
+        app.debug = True
         connect_to_db(app)
 
     # Use the DebugToolbar
     DebugToolbarExtension(app)
 
     PORT = int(os.environ.get("PORT", 5000))
-    app.run(debug=False, host="0.0.0.0", port=PORT)
+    app.run(debug=True, host="0.0.0.0", port=PORT)

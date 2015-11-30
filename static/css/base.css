@@ -22,14 +22,15 @@ body {
     background-image: url('https://s3-us-west-2.amazonaws.com/hbpodcastproject/strata.jpg');
     background-repeat:no-repeat;
     background-size:cover;
-    height: 400px;
+    height: 200px;
 }
 
 .podcast-btn {
-    margin-top: 190px;
+    margin-top: -8px;
 }
 
 .navbar-right {
     padding-right: 35px;
     font-weight: 400;
 }
+

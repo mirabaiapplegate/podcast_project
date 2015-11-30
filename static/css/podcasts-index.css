@@ -68,3 +68,11 @@
   height: 400px;
   margin: 0 auto;
 }
+
+#header-image {
+  height: 399px;
+}
+
+.podcast-btn {
+  margin-top: 190px;
+}
