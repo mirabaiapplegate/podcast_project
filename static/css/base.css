@@ -13,6 +13,10 @@ body {
     position: absolute;
 }
 
+.container-fluid {
+    padding: 0;
+}
+
 #profile-image {
     height: 50px;
     width: 50px;
